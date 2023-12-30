@@ -1,0 +1,68 @@
+﻿@using FundraisingApp.Entities;
+@using FundraisingApp.Enums;
+@model IEnumerable<Donation>
+
+@{
+    ViewData["Title"] = "Donation";
+}
+
+
+<h2>Donation List</h2>
+
+<div class="table-responsive">
+
+    <table class="table table-hover table-borderless">
+        <thead>
+            <tr>
+                <th>Campaign</th>
+                <th>Donor</th>
+                <th>DonationAmount</th>
+                <th>PaymentMethod</th>
+                <th>Remark</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @if (Model is not null && Model.Any())
+            {
+                @foreach (var Donation in Model)
+                {
+                    <tr>
+                        <td>
+                            @Donation.Campaign.Title
+                        </td>
+                        <td>
+                            @Donation.Donor.FirstName @Donation.Donor.LastName
+                        </td>
+                        <td>
+                            @Donation.DonationAmount
+                        </td>
+                        <td>
+                            @Donation.PaymentMethod.PaymentMethodName
+                        </td>
+                        <td>
+                            @Donation.Remark
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Actions">
+                                @if(Donation.IsVerified == false)
+                                {
+                                    <a href="/Donation/verifyDonation/@Donation.Id" class="btn btn-primary active">Verify</a>
+                                }
+                                else
+                                {
+                                    <a href="" class="btn btn-primary active">Voucher</a>
+                                }
+                                </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>No Data</tr>
+            }
+
+        </tbody>
+    </table>
+</div>

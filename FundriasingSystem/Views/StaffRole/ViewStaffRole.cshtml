@@ -1,0 +1,60 @@
+﻿@using FundraisingApp.Entities;
+@using FundraisingApp.Enums;
+@model IEnumerable<StaffRole>
+
+@{
+    ViewData["Title"] = "StaffRole";
+}
+
+
+<h2>StaffRole List</h2>
+
+<div class="table-responsive">
+
+    <a href="/staffRole/createStaffRole" class="btn btn-primary">Create StaffRole</a>
+
+    <table class="table table-hover table-borderless">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @if (Model is not null && Model.Any())
+            {
+                @foreach (var StaffRole in Model)
+                {
+                    <tr>
+                        <td>
+                            @StaffRole.RoleName
+                        </td>
+                        <td>
+                            @StaffRole.Status
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Actions">
+                                <a href="/StaffRole/editStaffRole/@StaffRole.Id" class="btn btn-primary active">Edit</a>
+
+                                @if (StaffRole.Status == StatusEnum.Active.ToString())
+                                {
+                                    <a href="/StaffRole/Deactivate/@StaffRole.Id" class="btn btn-danger">Deactivate</a>
+                                }
+                                else
+                                {
+                                    <a href="/StaffRole/Activate/@StaffRole.Id" class="btn btn-danger">Activate</a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>No Data</tr>
+            }
+
+        </tbody>
+    </table>
+</div>

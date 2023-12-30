@@ -1,0 +1,23 @@
+﻿@using FundriasingSystem.Models.Account;
+@model LoginViewModel
+
+
+<form asp-action="Login" asp-controller="Account" method="post">
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input type="text" class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Password</label>
+        <input type="password" class="form-control" asp-for="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+
+</form>

@@ -1,0 +1,18 @@
+﻿@using FundriasingSystem.Models.StaffRole;
+@model CreateStaffRoleViewModel
+
+@{
+}
+
+<form asp-action="CreateStaffRole" asp-controller="StaffRole" method="post">
+
+    <div class="mb-3">
+        <label asp-for="RoleName" class="form-label">StaffRole Name</label>
+        <input type="text" class="form-control" asp-for="RoleName" />
+        <span asp-validation-for="RoleName" class="text-danger"></span>
+    </div>
+
+    <div class="">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>

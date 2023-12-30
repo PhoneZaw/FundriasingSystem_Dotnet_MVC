@@ -1,0 +1,84 @@
+﻿@using FundraisingApp.Entities;
+@using FundraisingApp.Enums;
+@model IEnumerable<Campaign>
+
+@{
+    ViewData["Title"] = "Campaign";
+}
+
+
+<h2>Campaign List</h2>
+
+<div class="table-responsive">
+
+    <a href="/campaign/createCampaign" class="btn btn-primary">Create Campaign</a>
+
+    <table class="table table-hover table-borderless">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>TargetAmount</th>
+                <th>TagetDate</th>
+                <th>CampaignType</th>
+                <th>Staff</th>
+                <th>Images</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @if (Model is not null && Model.Any())
+            {
+                @foreach (var Campaign in Model)
+                {
+                    <tr>
+                        <td>
+                            @Campaign.Title
+                        </td>
+                        <td>
+                            @Campaign.Description
+                        </td>
+                        <td>
+                            @Campaign.TargetAmount
+                        </td>
+                        <td>
+                            @Campaign.TargetDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @Campaign.CampaignType.CampaignTypeName
+                        </td>
+                        <td>
+                            @Campaign.Staff.FirstName @Campaign.Staff.LastName
+                        </td>
+                        <td>
+                            @Campaign.Images
+                        </td>
+                        <td>
+                            @Campaign.Status
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Actions">
+                                <a href="/Campaign/editCampaign/@Campaign.Id" class="btn btn-primary active">Edit</a>
+
+                                @if (Campaign.Status == StatusEnum.Active.ToString())
+                                {
+                                    <a href="/Campaign/Deactivate/@Campaign.Id" class="btn btn-danger">Deactivate</a>
+                                }
+                                else
+                                {
+                                    <a href="/Campaign/Activate/@Campaign.Id" class="btn btn-danger">Activate</a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>No Data</tr>
+            }
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,60 @@
+﻿@using FundraisingApp.Entities;
+@using FundraisingApp.Enums;
+@model IEnumerable<CampaignType>
+
+@{
+    ViewData["Title"] = "CampaignType";
+}
+
+
+<h2>CampaignType List</h2>
+
+<div class="table-responsive">
+
+    <a href="/CampaignType/CreateCampaignType" class="btn btn-primary">Create CampaignType</a>
+
+    <table class="table table-hover table-borderless">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @if (Model is not null && Model.Any())
+            {
+                @foreach (var CampaignType in Model)
+                {
+                    <tr>
+                        <td>
+                            @CampaignType.CampaignTypeName
+                        </td>
+                        <td>
+                            @CampaignType.Status
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Actions">
+                                <a href="/CampaignType/editCampaignType/@CampaignType.Id" class="btn btn-primary active">Edit</a>
+
+                                @if (CampaignType.Status == StatusEnum.Active.ToString())
+                                {
+                                    <a href="/CampaignType/Deactivate/@CampaignType.Id" class="btn btn-danger">Deactivate</a>
+                                }
+                                else
+                                {
+                                    <a href="/CampaignType/Activate/@CampaignType.Id" class="btn btn-danger">Activate</a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>No Data</tr>
+            }
+
+        </tbody>
+    </table>
+</div>

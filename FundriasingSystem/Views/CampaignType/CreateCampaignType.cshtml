@@ -1,0 +1,18 @@
+﻿@using FundriasingSystem.Models.CampaignType;
+@model CreateCampaignTypeViewModel
+
+@{
+}
+
+<form asp-action="CreateCampaignType" asp-controller="CampaignType" method="post">
+
+    <div class="mb-3">
+        <label asp-for="CampaignTypeName" class="form-label">CampaignType Name</label>
+        <input type="text" class="form-control" asp-for="CampaignTypeName" />
+        <span asp-validation-for="CampaignTypeName" class="text-danger"></span>
+    </div>
+
+    <div class="">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>

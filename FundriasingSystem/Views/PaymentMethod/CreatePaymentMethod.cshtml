@@ -1,0 +1,24 @@
+﻿@using FundriasingSystem.Models.PaymentMethod;
+@model CreatePaymentMethodViewModel
+
+@{
+}
+
+<form asp-action="CreatePaymentMethod" asp-controller="PaymentMethod" method="post">
+
+    <div class="mb-3">
+        <label asp-for="PaymentMethodName" class="form-label">PaymentMethod Name</label>
+        <input type="text" class="form-control" asp-for="PaymentMethodName" />
+        <span asp-validation-for="PaymentMethodName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <input asp-for="IsVerificationRequired" />
+        <label asp-for="IsVerificationRequired" class="form-label">VerificationRequired</label>
+        <span asp-validation-for="IsVerificationRequired" class="text-danger"></span>
+    </div>
+
+    <div class="">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>

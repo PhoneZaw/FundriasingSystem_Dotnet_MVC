@@ -1,0 +1,44 @@
+﻿@using FundriasingSystem.Models.Donation;
+@model CreateDonationViewModel
+
+@{
+}
+
+<form asp-action="CreateDonation" asp-controller="Donation" method="post">
+
+    <div class="mb-3">
+        <label asp-for="CampaignId" class="form-label">Campaign</label>
+        <select asp-for="CampaignId" asp-items="@Model.Campaigns" class="form-control mb-3">
+        </select>
+        <span asp-validation-for="CampaignId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DonationAmount" class="form-label">Donation Amount</label>
+        <input type="text" class="form-control" asp-for="DonationAmount" />
+        <span asp-validation-for="DonationAmount" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Remark" class="form-label">Remark</label>
+        <input type="text" class="form-control" asp-for="Remark" />
+        <span asp-validation-for="Remark" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PaymentMethodId" class="form-label">Payment Method</label>
+        <select asp-for="PaymentMethodId" asp-items="@Model.PaymentMethods" class="form-control mb-3">
+        </select>
+        <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PaymentVoucherFile" class="form-label">Payment Voucher</label>
+        <input type="text" class="form-control" asp-for="PaymentVoucherFile" />
+        <span asp-validation-for="PaymentVoucherFile" class="text-danger"></span>
+    </div>
+
+    <div class="">
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+</form>
