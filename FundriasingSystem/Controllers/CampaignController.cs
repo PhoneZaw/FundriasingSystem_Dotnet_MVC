@@ -4,11 +4,16 @@ using FundraisingApp.Services;
 using FundriasingSystem.Models.Campaign;
 using FundriasingSystem.Models.Staff;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FundriasingSystem.Controllers
@@ -18,20 +23,22 @@ namespace FundriasingSystem.Controllers
         private readonly CampaignService _CampaignService;
         private readonly CampaignTypeService _campaignTypeService;
         private readonly StaffService _staffService;
+        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMapper _mapper;
 
         public CampaignController(CampaignService CampaignService,
             CampaignTypeService CampaignTypeService,
             StaffService staffService,
+            IWebHostEnvironment hostEnvironment,
             IMapper mapper)
         {
             _CampaignService = CampaignService;
             _campaignTypeService = CampaignTypeService;
             _staffService = staffService;
+            _hostEnvironment = hostEnvironment;
             _mapper = mapper;
         }
 
-        [Authorize]
         public async Task<IActionResult> ViewCampaignAsync()
         {
             var Campaign = await _CampaignService.GetAllCampaignsAsync();
@@ -47,6 +54,41 @@ namespace FundriasingSystem.Controllers
             return View(Campaign);
         }
 
+        public async Task<IActionResult> CampaignListAsync([FromQuery] string search)
+        {
+            var Campaign = (await _CampaignService.GetAllCampaignsAsync()).Where(c => string.IsNullOrEmpty(search) || c.Title.Contains(search)).ToList();
+            var CampaignType = await _campaignTypeService.GetAllCampaignTypesAsync();
+
+            foreach(var item in Campaign)
+            {
+                item.CampaignType = CampaignType.FirstOrDefault(x => x.Id == item.CampaignTypeId);
+                item.Images = $"/img/{item.Images?.Split(',').FirstOrDefault()}";
+            }
+
+            return View(Campaign);
+        }
+
+        [Route("/campaign/campaignDetail/{id}")]
+        public async Task<IActionResult> CampaignDetailAsync(string id)
+        {
+            if(!Guid.TryParse(id, out var campaignGuid))
+            {
+                return NotFound();
+            }
+
+            var Campaign = await _CampaignService.GetByIdAsync(campaignGuid);
+
+            Campaign.CampaignType = await _campaignTypeService.GetByIdAsync(Campaign.CampaignTypeId);
+
+            if(Campaign.Images is not null)
+            {
+                Campaign.Images = string.Join(",", Campaign.Images?.Split(',').Select(i => $"/img/{i}"));
+            }
+
+            return View(Campaign);
+        }
+
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpGet]
         public async Task<ActionResult> createCampaignAsync()
         {
@@ -66,13 +108,28 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CreateCampaign(CreateCampaignViewModel model)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId").Value;
+
+            if(!Guid.TryParse(userId, out var userGuid))
+            {
+                return Unauthorized();
+            }
             if (ModelState.IsValid)
             {
                 var entity = _mapper.Map<Campaign>(model);
+
+                entity.StaffId = userGuid;
+
+                foreach (var imgFile in model.ImageFiles)
+                {
+                    string uniFileName = FileUpload(imgFile);
+
+                    entity.Images += string.IsNullOrEmpty(entity.Images) ? uniFileName : $",{uniFileName}";
+                }
 
                 await _CampaignService.CreateCampaignAsync(entity);
 
@@ -134,6 +191,23 @@ namespace FundriasingSystem.Controllers
             await _CampaignService.DeactivateCampaignAsync(Guid.Parse(id));
 
             return Redirect("/Campaign/viewCampaign");
+        }
+
+        private string FileUpload(IFormFile imgFile)
+        {
+            string uniFileName = null;
+            if (imgFile != null)
+            {
+                string uploadFoler = Path.Combine(_hostEnvironment.WebRootPath, "img");
+                uniFileName = Guid.NewGuid().ToString() + "_" + imgFile.FileName;
+                string filePath = Path.Combine(uploadFoler, uniFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    imgFile.CopyTo(fileStream);
+                }
+            }
+
+            return uniFileName;
         }
     }
 }

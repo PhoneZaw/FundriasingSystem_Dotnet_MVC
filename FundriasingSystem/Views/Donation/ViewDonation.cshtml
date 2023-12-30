@@ -47,11 +47,11 @@
                             <div class="btn-group" role="group" aria-label="Actions">
                                 @if(Donation.IsVerified == false)
                                 {
-                                    <a href="/Donation/verifyDonation/@Donation.Id" class="btn btn-primary active">Verify</a>
+                                    <button class="btn btn-primary active" onclick="OpenModal('@Donation.Id.ToString()','@Donation.PaymentVoucherUrl', '@Donation.IsVerified')">Verify</button>
                                 }
                                 else
                                 {
-                                    <a href="" class="btn btn-primary active">Voucher</a>
+                                    <button class="btn btn-primary active" onclick="OpenModal('@Donation.PaymentVoucherUrl',  '@Donation.IsVerified')">Voucher</button>
                                 }
                                 </div>
                         </td>
@@ -66,3 +66,45 @@
         </tbody>
     </table>
 </div>
+
+<div class="modal fade" id="paymentVoucherModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Payment Voucher</h5>
+                <button type="button" class="close" onclick="CloseModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="voucherImg" src="" class="img-fluid rounded-start">
+            </div>
+            <div class="modal-footer">
+            
+                <a href="#" class="btn btn-primary" id="verify_btn">Verify</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+    {
+    <script>
+        function OpenModal(donationId, paymentVoucherUrl, isVerified){
+            $('#paymentVoucherModal #voucherImg').attr('src', `/img/${paymentVoucherUrl}`);
+            if (isVerified == "True"){
+                $('#paymentVoucherModal #verify_btn').hide();
+            }else{
+                $('#paymentVoucherModal #verify_btn').attr('href', `/donation/Verify/${donationId}`);
+
+            }
+            $("#paymentVoucherModal").modal("show");
+        }
+
+        function CloseModal(){
+            $("#paymentVoucherModal").modal("hide");
+        }
+    </script>
+}

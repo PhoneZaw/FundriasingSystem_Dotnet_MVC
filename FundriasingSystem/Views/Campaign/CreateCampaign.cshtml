@@ -4,7 +4,7 @@
 @{
 }
 
-<form asp-action="CreateCampaign" asp-controller="Campaign" method="post">
+<form asp-action="CreateCampaign" asp-controller="Campaign" method="post" enctype="multipart/form-data">
 
     <div class="mb-3">
         <label asp-for="Title" class="form-label">Title</label>
@@ -27,9 +27,9 @@
         <span asp-validation-for="TargetDate" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="Images" class="form-label">Images</label>
-        <input class="form-control" asp-for="Images" />
-        <span asp-validation-for="Images" class="text-danger"></span>
+        <label asp-for="ImageFiles" class="form-label">Images</label>
+        <input class="form-control" asp-for="ImageFiles" multiple />
+        <span asp-validation-for="ImageFiles" class="text-danger"></span>
     </div>
 
     <div class="mb-3">

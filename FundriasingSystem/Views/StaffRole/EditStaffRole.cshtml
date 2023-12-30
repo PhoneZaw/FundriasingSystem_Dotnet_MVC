@@ -6,6 +6,9 @@
 
 <form asp-action="EditStaffRole" asp-controller="StaffRole" method="post">
 
+    <input asp-for="Id" hidden />
+    <input asp-for="CreatedAt" hidden />
+
     <div class="mb-3">
         <label asp-for="RoleName" class="form-label">Staff Role Name</label>
         <input type="text" class="form-control" asp-for="RoleName" />

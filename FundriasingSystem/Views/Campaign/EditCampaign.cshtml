@@ -6,6 +6,12 @@
 
 <form asp-action="EditCampaign" asp-controller="Campaign" method="post">
 
+
+    <input asp-for="Id" hidden/>
+    <input asp-for="Status" hidden/>
+    <input asp-for="CreatedAt" hidden/>
+    <input asp-for="StaffId" hidden/>
+
     <div class="mb-3">
         <label asp-for="Title" class="form-label">Title</label>
         <input type="text" class="form-control" asp-for="Title" />

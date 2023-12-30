@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using FundriasingSystem.Models.Account;
+using System.Collections;
 
 namespace FundriasingSystem.Controllers
 {
@@ -30,16 +31,23 @@ namespace FundriasingSystem.Controllers
             _staffRoleRepository = staffRoleRepository;
         }
 
+        [HttpGet]
+        public IActionResult AdminLogin()
+        {
+            return View();
+        }
+
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> StaffLogin(string email, string password, string redirectUrl)
+        public async Task<IActionResult> AdminLogin(LoginViewModel model)
         {
 
-            var staff = (await _staffRepository.GetAllAsync()).FirstOrDefault(s => s.Email == email);
+            var staff = (await _staffRepository.GetAllAsync()).FirstOrDefault(s => s.Email == model.Email);
 
             if (staff is null)
                 throw new DomainException("Email not found");
 
-            var hashPassword = HashHelper.GetHash(password);
+            var hashPassword = HashHelper.GetHash(model.Password);
 
             if (staff.HashPassword != hashPassword)
                 throw new DomainException("Password is incorrect");
@@ -49,12 +57,13 @@ namespace FundriasingSystem.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, staff.Email),
+                new Claim("UserId", staff.Id.ToString()),
                 new Claim("FullName", $"{staff.FirstName} {staff.LastName}"),
                 new Claim(ClaimTypes.Role, role != null ? role.RoleName : ""),
             };
 
             var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                claims, "Admin");
 
             var authProperties = new AuthenticationProperties
             {
@@ -66,15 +75,11 @@ namespace FundriasingSystem.Controllers
             };
 
             await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
+                "Admin",
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
 
-            if (redirectUrl is null)
-            {
-                return Redirect("/");
-            }
-            return Redirect(redirectUrl);
+            return Redirect("/");
         }
 
         [HttpGet]
@@ -100,6 +105,7 @@ namespace FundriasingSystem.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, donor.Email),
+                new Claim("UserId", donor.Id.ToString()),
                 new Claim("FullName", $"{donor.FirstName} {donor.LastName}"),
                 new Claim(ClaimTypes.Role, "donor"),
             };

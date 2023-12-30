@@ -1,0 +1,35 @@
+﻿@using FundraisingApp.Entities;
+@model Campaign
+
+@{
+    var currentAmount = ViewData["CurrentAmount"];
+
+    var donateUrl = $"/donation/createDonation?CampaignId={Model.Id}";
+}
+
+<p>Campaign Title - @Model.Title</p>
+
+<p>Campaign Images</p>
+@if(!string.IsNullOrWhiteSpace(Model.Images))
+{
+    @foreach (var image in Model.Images.Split(","))
+    {
+        <img src="@image" class="img-fluid rounded-start">
+    }
+}
+
+<p>Campaign Description - @Model.Description</p>
+
+<div>
+    <p>Campaign Target Amount - @Model.TargetAmount</p>
+    <p>Campaign Current Amount - @currentAmount</p>
+    <p>Campaign Target Date - @Model.TargetDate.ToString("dd/MM/yyyy")</p>
+</div>
+
+<div>
+    <p>Donation</p>
+    <p>Donate 1000</p>
+    <a href="@donateUrl&&DonationAmount=1000" class="btn btn-primary">Donate 1000</a>
+    <p>Donate 5000</p>
+    <a href="@donateUrl&&DonationAmount=5000" class="btn btn-primary">Donate 5000</a>
+</div>

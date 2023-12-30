@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FundriasingSystem.Models.Campaign
@@ -12,7 +13,7 @@ namespace FundriasingSystem.Models.Campaign
         public DateTime TargetDate { get; set; }
         public Guid StaffId { get; set; }
         public Guid CampaignTypeId { get; set; }
-        public string Images { get; set; }
+        public List<IFormFile> ImageFiles { get; set; }
         public List<SelectListItem> CampaignTypes { get; set; }
     }
 }

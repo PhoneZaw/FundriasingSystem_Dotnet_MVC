@@ -1,0 +1,39 @@
+﻿@using FundraisingApp.Entities;
+@model IEnumerable<Campaign>
+
+<div class="mx-auto">
+
+    <h3 class="">CampaignList</h3>
+
+    <div class="col g-4">
+        @if (Model is not null)
+            @foreach (var campaign in Model)
+            {
+                <div class="card mb-2 mx-auto" style="max-width: 640px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="@campaign.Images" class="img-fluid rounded-start">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <span class="badge badge-pill badge-primary">
+                                    @campaign.CampaignType.CampaignTypeName
+                                </span>
+                                <h5 class="card-title">@campaign.Title</h5>
+                                <p class="card-text">
+                                    @campaign.Description
+                                </p>
+                                <p class="card-text">
+                                    @campaign.TargetAmount
+                                </p>
+                                <p class="card-text">
+                                    @campaign.TargetDate
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+    </div>
+
+</div>

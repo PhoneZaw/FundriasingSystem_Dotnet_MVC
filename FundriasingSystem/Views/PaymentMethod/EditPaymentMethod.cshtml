@@ -6,6 +6,9 @@
 
 <form asp-action="EditPaymentMethod" asp-controller="PaymentMethod" method="post">
 
+    <input asp-for="Id" hidden />
+    <input asp-for="CreatedAt" hidden />
+
     <div class="mb-3">
         <label asp-for="PaymentMethodName" class="form-label">PaymentMethod Name</label>
         <input type="text" class="form-control" asp-for="PaymentMethodName" />

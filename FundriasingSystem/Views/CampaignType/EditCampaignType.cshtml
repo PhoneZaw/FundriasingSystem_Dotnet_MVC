@@ -5,6 +5,9 @@
 }
 
 <form asp-action="EditCampaignType" asp-controller="CampaignType" method="post">
+    
+    <input asp-for="Id" hidden/>
+    <input asp-for="CreatedAt" hidden/>
 
     <div class="mb-3">
         <label asp-for="CampaignTypeName" class="form-label">CampaignType Name</label>
