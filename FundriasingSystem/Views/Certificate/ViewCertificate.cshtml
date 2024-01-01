@@ -1,0 +1,17 @@
+﻿@using FundriasingSystem.Models.Certificate;
+@model CertificateViewModel
+
+<h2>Certificate</h2>
+
+<p>Issued to - @Model.Donor.GetFullName()</p>
+
+<p>Campaign - @Model.Campaign.Title</p>
+
+<p>Amount - @Model.TotalAmount</p>
+
+<p>Issued on - @Model.CreatedAt</p>
+
+@foreach(var item in Model.Donations)
+{
+    <p>Donate @item.DonationAmount at @item.CreatedAt</p>
+})

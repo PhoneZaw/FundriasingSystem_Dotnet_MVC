@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FundriasingSystem.Entities;
+using System;
 
 namespace FundraisingApp.Entities
 {
@@ -11,6 +12,7 @@ namespace FundraisingApp.Entities
         public Guid DonorId { get; set; }
         public Guid CampaignId { get; set; }
         public Guid PaymentMethodId { get; set; }
+        public Guid CertificateId { get; set; }
         public Donor Donor { get; set; }
         public Campaign Campaign { get; set; }
         public PaymentMethod PaymentMethod { get; set; }

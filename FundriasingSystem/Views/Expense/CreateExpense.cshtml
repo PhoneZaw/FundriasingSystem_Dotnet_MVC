@@ -1,0 +1,42 @@
+﻿@using FundriasingSystem.Models.Expense;
+@model CreateExpenseViewModel
+
+@{
+}
+
+<form asp-action="CreateExpense" asp-controller="Expense" method="post">
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Expense Title</label>
+        <input type="text" class="form-control" asp-for="Title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <input type="text" class="form-control" asp-for="Description" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Amount" class="form-label">Amount</label>
+        <input class="form-control" asp-for="Amount" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Expense Type</label>
+        <select asp-for="ExpenseTypeId" asp-items="@Model.ExpenseTypes" class="form-control mb-3">
+        </select>
+        <span asp-validation-for="ExpenseTypeId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Campaign</label>
+        <select asp-for="CampaignId" asp-items="@Model.Campaigns" class="form-control mb-3">
+        </select>
+        <span asp-validation-for="CampaignId" class="text-danger"></span>
+    </div>
+
+    <div class="">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>

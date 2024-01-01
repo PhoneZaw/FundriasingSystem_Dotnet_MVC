@@ -45,13 +45,16 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                @if(Donation.IsVerified == false)
+                                @if (Donation.PaymentMethod.IsVerificationRequired)
                                 {
-                                    <button class="btn btn-primary active" onclick="OpenModal('@Donation.Id.ToString()','@Donation.PaymentVoucherUrl', '@Donation.IsVerified')">Verify</button>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-primary active" onclick="OpenModal('@Donation.PaymentVoucherUrl',  '@Donation.IsVerified')">Voucher</button>
+                                    @if (Donation.IsVerified == false)
+                                    {
+                                        <button class="btn btn-primary active" onclick="OpenModal('@Donation.Id.ToString()','@Donation.PaymentVoucherUrl', '@Donation.IsVerified')">Verify</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-primary active" onclick="OpenModal('@Donation.PaymentVoucherUrl',  '@Donation.IsVerified')">Voucher</button>
+                                    }
                                 }
                                 </div>
                         </td>

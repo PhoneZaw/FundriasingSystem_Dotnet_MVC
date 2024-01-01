@@ -2,8 +2,8 @@
 using FundraisingApp.Entities;
 using FundraisingApp.Exceptions;
 using FundraisingApp.Services;
-using FundriasingSystem.Models.Campaign;
-using FundriasingSystem.Models.Donation;
+using FundriasingSystem.Models.CampaignModels;
+using FundriasingSystem.Models.DonationModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

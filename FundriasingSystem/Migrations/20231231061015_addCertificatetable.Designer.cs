@@ -4,14 +4,16 @@ using FundriasingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FundriasingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231231061015_addCertificatetable")]
+    partial class addCertificatetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,9 +177,6 @@ namespace FundriasingSystem.Migrations
                     b.Property<bool>("IsVerificationRequired")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PaymentMethodIconUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PaymentMethodName")
                         .HasColumnType("nvarchar(max)");
 
@@ -247,29 +246,6 @@ namespace FundriasingSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StaffRoles");
-                });
-
-            modelBuilder.Entity("FundriasingSystem.Entities.Certificate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CampaignId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DonorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Certificates");
                 });
 
             modelBuilder.Entity("FundriasingSystem.Entities.Expense", b =>

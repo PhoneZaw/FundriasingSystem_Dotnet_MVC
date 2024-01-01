@@ -1,0 +1,18 @@
+﻿@using FundriasingSystem.Models.ExpenseType;
+@model CreateExpenseTypeViewModel
+
+@{
+}
+
+<form asp-action="CreateExpenseType" asp-controller="ExpenseType" method="post">
+
+    <div class="mb-3">
+        <label asp-for="ExpenseTypeName" class="form-label">ExpenseType Name</label>
+        <input type="text" class="form-control" asp-for="ExpenseTypeName" />
+        <span asp-validation-for="ExpenseTypeName" class="text-danger"></span>
+    </div>
+
+    <div class="">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>

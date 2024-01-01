@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FundraisingApp.Entities;
 using FundraisingApp.Services;
-using FundriasingSystem.Models.Donor;
+using FundriasingSystem.Models.DonorModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -32,7 +32,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        public ActionResult createDonor()
+        public ActionResult RegisterDonor()
         {
 
             return View();
@@ -40,7 +40,7 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> CreateDonor(CreateDonorViewModel model)
+        public async Task<ActionResult> RegisterDonor(CreateDonorViewModel model)
         {
             if (ModelState.IsValid)
             {

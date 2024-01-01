@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FundraisingApp.Entities;
 using FundraisingApp.Services;
-using FundriasingSystem.Models.Campaign;
+using FundriasingSystem.Models.CampaignModels;
 using FundriasingSystem.Models.Staff;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -124,12 +125,16 @@ namespace FundriasingSystem.Controllers
 
                 entity.StaffId = userGuid;
 
-                foreach (var imgFile in model.ImageFiles)
+                if(model.ImageFiles is not null)
                 {
-                    string uniFileName = FileUpload(imgFile);
+                    foreach (var imgFile in model.ImageFiles)
+                    {
+                        string uniFileName = FileUpload(imgFile);
 
-                    entity.Images += string.IsNullOrEmpty(entity.Images) ? uniFileName : $",{uniFileName}";
+                        entity.Images += string.IsNullOrEmpty(entity.Images) ? uniFileName : $",{uniFileName}";
+                    }
                 }
+                
 
                 await _CampaignService.CreateCampaignAsync(entity);
 

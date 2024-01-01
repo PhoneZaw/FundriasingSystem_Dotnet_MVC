@@ -1,0 +1,60 @@
+﻿@using FundraisingApp.Enums;
+@using FundriasingSystem.Entities;
+@model IEnumerable<ExpenseType>
+
+@{
+    ViewData["Title"] = "ExpenseType";
+}
+
+
+<h2>ExpenseType List</h2>
+
+<a href="/ExpenseType/CreateExpenseType" class="btn btn-primary">Create ExpenseType</a>
+<div class="table-responsive">
+
+
+    <table class="table table-hover table-borderless">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @if (Model is not null && Model.Any())
+            {
+                @foreach (var ExpenseType in Model)
+                {
+                    <tr>
+                        <td>
+                            @ExpenseType.ExpenseTypeName
+                        </td>
+                        <td>
+                            @ExpenseType.Status
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Actions">
+                                <a href="/ExpenseType/editExpenseType/@ExpenseType.Id" class="btn btn-primary active">Edit</a>
+
+                                @if (ExpenseType.Status == StatusEnum.Active.ToString())
+                                {
+                                    <a href="/ExpenseType/Deactivate/@ExpenseType.Id" class="btn btn-danger">Deactivate</a>
+                                }
+                                else
+                                {
+                                    <a href="/ExpenseType/Activate/@ExpenseType.Id" class="btn btn-danger">Activate</a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>No Data</tr>
+            }
+
+        </tbody>
+    </table>
+</div>

@@ -64,6 +64,9 @@ namespace FundriasingSystem
             services.AddScoped<CampaignTypeService>();
             services.AddScoped<DonationService>();
             services.AddScoped<PaymentMethodService>();
+            services.AddScoped<ExpenseTypeService>();
+            services.AddScoped<ExpenseService>();
+            services.AddScoped<CertificateService>();
 
             services.AddHttpContextAccessor();
 

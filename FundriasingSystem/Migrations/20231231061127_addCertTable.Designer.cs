@@ -4,14 +4,16 @@ using FundriasingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FundriasingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231231061127_addCertTable")]
+    partial class addCertTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,9 +176,6 @@ namespace FundriasingSystem.Migrations
 
                     b.Property<bool>("IsVerificationRequired")
                         .HasColumnType("bit");
-
-                    b.Property<string>("PaymentMethodIconUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentMethodName")
                         .HasColumnType("nvarchar(max)");
