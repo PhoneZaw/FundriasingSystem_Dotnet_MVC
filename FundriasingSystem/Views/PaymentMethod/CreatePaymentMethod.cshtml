@@ -5,12 +5,18 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<form asp-action="CreatePaymentMethod" asp-controller="PaymentMethod" method="post">
+<form asp-action="CreatePaymentMethod" asp-controller="PaymentMethod" method="post" enctype="multipart/form-data">
 
     <div class="mb-3">
         <label asp-for="PaymentMethodName" class="form-label">PaymentMethod Name</label>
         <input type="text" class="form-control" asp-for="PaymentMethodName" />
         <span asp-validation-for="PaymentMethodName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="IconFile" class="form-label">Images</label>
+        <input class="form-control" asp-for="IconFile" multiple />
+        <span asp-validation-for="IconFile" class="text-danger"></span>
     </div>
 
     <div class="mb-3">

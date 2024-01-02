@@ -11,7 +11,7 @@
 
 <h2>Staff List</h2>
 
-    <a href="/staff/createStaff" class="btn btn-primary">Create Staff</a>
+    <a href="/admin/staff/create" class="btn btn-primary">Create Staff</a>
 <div class="table-responsive">
 
 
@@ -53,15 +53,15 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="/Staff/editstaff/@staff.Id" class="btn btn-primary active">Edit</a>
+                                    <a href="/admin/Staff/edit/@staff.Id" class="btn btn-primary active">Edit</a>
 
                                 @if (staff.Status == StatusEnum.Active.ToString())
                                 {
-                                    <a href="/Staff/Deactivate/@staff.Id" class="btn btn-danger">Deactivate</a>
+                                    <a href="/admin/Staff/Deactivate/@staff.Id" class="btn btn-danger">Deactivate</a>
                                 }
                                 else
                                 {
-                                    <a href ="/Staff/Activate/@staff.Id" class="btn btn-danger">Activate</a>
+                                    <a href ="/admin/Staff/Activate/@staff.Id" class="btn btn-danger">Activate</a>
                                 }
                             </div>
                         </td>

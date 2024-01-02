@@ -4,7 +4,7 @@
 @{
     var currentAmount = ViewData["CurrentAmount"];
 
-    var donateUrl = $"/donation/createDonation?CampaignId={Model.Id}";
+    var donateUrl = $"/donations/donate?CampaignId={Model.Id}";
 }
 
 <p>Campaign Title - @Model.Title</p>

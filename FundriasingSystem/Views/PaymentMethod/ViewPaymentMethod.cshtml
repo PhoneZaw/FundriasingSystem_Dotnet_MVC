@@ -10,7 +10,7 @@
 
 <h2>PaymentMethod List</h2>
 
-    <a href="/PaymentMethod/CreatePaymentMethod" class="btn btn-primary">Create PaymentMethod</a>
+<a href="/admin/PaymentMethods/create" class="btn btn-primary">Create PaymentMethod</a>
 <div class="table-responsive">
 
 
@@ -40,15 +40,15 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="/PaymentMethod/editPaymentMethod/@PaymentMethod.Id" class="btn btn-primary active">Edit</a>
+                                <a href="/admin/PaymentMethods/edit/@PaymentMethod.Id" class="btn btn-primary active">Edit</a>
 
                                 @if (PaymentMethod.Status == StatusEnum.Active.ToString())
                                 {
-                                    <a href="/PaymentMethod/Deactivate/@PaymentMethod.Id" class="btn btn-danger">Deactivate</a>
+                                    <a href="/admin/PaymentMethods/Deactivate/@PaymentMethod.Id" class="btn btn-danger">Deactivate</a>
                                 }
                                 else
                                 {
-                                    <a href="/PaymentMethod/Activate/@PaymentMethod.Id" class="btn btn-danger">Activate</a>
+                                    <a href="/admin/PaymentMethods/Activate/@PaymentMethod.Id" class="btn btn-danger">Activate</a>
                                 }
                             </div>
                         </td>

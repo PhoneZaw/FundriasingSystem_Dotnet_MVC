@@ -79,7 +79,7 @@ namespace FundriasingSystem.Controllers
             return Redirect($"/campaigns?search={search}");
         }
 
-        [Route("/campaign/{id}")]
+        [Route("/campaigns/{id}")]
         public async Task<IActionResult> CampaignDetailAsync(string id)
         {
             if(!Guid.TryParse(id, out var campaignGuid))

@@ -46,15 +46,15 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="/Donor/editdonor/@donor.Id" class="btn btn-primary active">Edit</a>
+                                <a href="/admin/Donors/edit/@donor.Id" class="btn btn-primary active">Edit</a>
 
                                 @if (donor.Status == StatusEnum.Active.ToString())
                                 {
-                                    <a href="/Donor/Deactivate/@donor.Id" class="btn btn-danger">Deactivate</a>
+                                    <a href="/admin/Donors/Deactivate/@donor.Id" class="btn btn-danger">Deactivate</a>
                                 }
                                 else
                                 {
-                                    <a href="/Donor/Activate/@donor.Id" class="btn btn-danger">Activate</a>
+                                    <a href="/admin/Donors/Activate/@donor.Id" class="btn btn-danger">Activate</a>
                                 }
                             </div>
                         </td>

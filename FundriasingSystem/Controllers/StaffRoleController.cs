@@ -24,7 +24,7 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin/staffRoles")]
         public async Task<IActionResult> ViewStaffRoleAsync()
         {
@@ -33,7 +33,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin/staffRoles/create")]
         public ActionResult createStaffRole()
         {
@@ -42,7 +42,7 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin/staffRoles/create")]
         public async Task<ActionResult> CreateStaffRole(CreateStaffRoleViewModel model)
         {

@@ -84,8 +84,7 @@
                 <img id="voucherImg" src="" class="img-fluid rounded-start">
             </div>
             <div class="modal-footer">
-            
-                <a href="#" class="btn btn-primary" id="verify_btn">Verify</a>
+                <a href="" class="btn btn-primary" id="verify_btn">Verify</a>
             </div>
         </div>
     </div>
@@ -97,11 +96,12 @@
     {
     <script>
         function OpenModal(donationId, paymentVoucherUrl, isVerified){
+            console.log(isVerified)
             $('#paymentVoucherModal #voucherImg').attr('src', `/img/${paymentVoucherUrl}`);
             if (isVerified == "True"){
-                $('#paymentVoucherModal #verify_btn').hide();
+                $('#verify_btn').hide();
             }else{
-                $('#paymentVoucherModal #verify_btn').attr('href', `/donation/Verify/${donationId}`);
+                $('#paymentVoucherModal #verify_btn').attr('href', `/admin/donations/Verify/${donationId}`);
 
             }
             $("#paymentVoucherModal").modal("show");

@@ -33,7 +33,6 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Cookies")]
         [Route("/donors/register")]
         public ActionResult RegisterDonor()
         {
@@ -43,7 +42,6 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "Cookies")]
         [Route("/donors/register")]
         public async Task<ActionResult> RegisterDonor(CreateDonorViewModel model)
         {
@@ -53,7 +51,7 @@ namespace FundriasingSystem.Controllers
 
                 await _DonorService.CreateDonorAsync(entity, model.Password);
 
-                return RedirectToAction("ViewDonor");
+                return Redirect("/");
             }
 
             return View(model);

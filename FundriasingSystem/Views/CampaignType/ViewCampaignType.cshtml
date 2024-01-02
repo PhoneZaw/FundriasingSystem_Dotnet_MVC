@@ -10,7 +10,7 @@
 
 <h2>CampaignType List</h2>
 
-    <a href="/CampaignType/CreateCampaignType" class="btn btn-primary">Create CampaignType</a>
+<a href="/admin/CampaignTypes/create" class="btn btn-primary">Create CampaignType</a>
 <div class="table-responsive">
 
 
@@ -36,15 +36,15 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="/CampaignType/editCampaignType/@CampaignType.Id" class="btn btn-primary active">Edit</a>
+                                <a href="/admin/CampaignTypes/edit/@CampaignType.Id" class="btn btn-primary active">Edit</a>
 
                                 @if (CampaignType.Status == StatusEnum.Active.ToString())
                                 {
-                                    <a href="/CampaignType/Deactivate/@CampaignType.Id" class="btn btn-danger">Deactivate</a>
+                                    <a href="/admin/CampaignTypes/Deactivate/@CampaignType.Id" class="btn btn-danger">Deactivate</a>
                                 }
                                 else
                                 {
-                                    <a href="/CampaignType/Activate/@CampaignType.Id" class="btn btn-danger">Activate</a>
+                                    <a href="/admin/CampaignTypes/Activate/@CampaignType.Id" class="btn btn-danger">Activate</a>
                                 }
                             </div>
                         </td>

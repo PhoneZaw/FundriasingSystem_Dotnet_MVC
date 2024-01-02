@@ -7,9 +7,10 @@
 
     <div class="col g-4">
         @if (Model is not null)
+        {
             @foreach (var campaign in Model)
             {
-                <div class="card mb-2 mx-auto" style="max-width: 640px;">
+                <a href="/campaigns/@campaign.Id" class="card mb-2 mx-auto" style="max-width: 640px;">
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img src="@campaign.Images" class="img-fluid rounded-start">
@@ -32,8 +33,20 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             }
+        }
     </div>
 
 </div>
+
+<style>
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    a:hover {
+        text-decoration: none;
+        color: black;
+    }
+</style>

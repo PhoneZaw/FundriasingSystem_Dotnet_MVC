@@ -121,7 +121,7 @@ namespace FundriasingSystem.Controllers
 
                 await _DonationService.CreateDonationAsync(entity);
 
-                return RedirectToAction("ViewDonation");
+                return RedirectToAction("CampaignList", "Campaign");
             }
 
             return View(model);

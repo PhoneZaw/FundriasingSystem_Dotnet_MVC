@@ -10,7 +10,7 @@
 
 <h2>Expense List</h2>
 
-<a href="/Expense/CreateExpense" class="btn btn-primary">Create Expense</a>
+<a href="/admin/Expenses/create" class="btn btn-primary">Create Expense</a>
 <div class="table-responsive">
 
 
@@ -48,15 +48,15 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="/Expense/editExpense/@Expense.Id" class="btn btn-primary active">Edit</a>
+                                <a href="/admin/Expenses/edit/@Expense.Id" class="btn btn-primary active">Edit</a>
 
                                 @if (Expense.Status == StatusEnum.Active.ToString())
                                 {
-                                    <a href="/Expense/Deactivate/@Expense.Id" class="btn btn-danger">Deactivate</a>
+                                    <a href="/admin/Expenses/Deactivate/@Expense.Id" class="btn btn-danger">Deactivate</a>
                                 }
                                 else
                                 {
-                                    <a href="/Expense/Activate/@Expense.Id" class="btn btn-danger">Activate</a>
+                                    <a href="/admin/Expenses/Activate/@Expense.Id" class="btn btn-danger">Activate</a>
                                 }
                             </div>
                         </td>
