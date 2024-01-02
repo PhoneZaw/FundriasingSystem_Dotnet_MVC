@@ -2,6 +2,7 @@
 using FundraisingApp.Entities;
 using FundraisingApp.Services;
 using FundriasingSystem.Models.Staff;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -26,6 +27,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staff")]
         public async Task<IActionResult> ViewStaffAsync()
         {
             var staff = await _staffService.GetAllStaffAsync();
@@ -39,6 +42,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staff/create")]
         public async Task<ActionResult> createStaff()
         {
 
@@ -61,6 +66,8 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staff/create")]
         public async Task<ActionResult> CreateStaff(CreateStaffViewModel model)
         {
             if (ModelState.IsValid)
@@ -76,7 +83,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/staff/editStaff/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staff/edit/{id}")]
         public async Task<ActionResult> EditStaff(string id)
         {
             var staff = await _staffService.GetByIdAsync(Guid.Parse(id));
@@ -98,6 +106,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staff/edit")]
         public async Task<ActionResult> EditStaff(EditStaffViewModel model)
         {
             if (ModelState.IsValid)
@@ -112,7 +122,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/staff/Activate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staff/Activate/{id}")]
         public async Task<IActionResult> Activate(string id)
         {
 
@@ -121,7 +132,8 @@ namespace FundriasingSystem.Controllers
             return Redirect("/staff/viewStaff");
         }
 
-        [Route("/staff/Deactivate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staff/Deactivate/{id}")]
         public async Task<IActionResult> Deactivate(string id)
         {
 

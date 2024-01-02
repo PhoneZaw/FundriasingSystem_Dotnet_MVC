@@ -24,7 +24,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staffRoles")]
         public async Task<IActionResult> ViewStaffRoleAsync()
         {
             var StaffRole = await _StaffRoleService.GetAllRolesAsync();
@@ -32,6 +33,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staffRoles/create")]
         public ActionResult createStaffRole()
         {
             return View();
@@ -39,6 +42,8 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staffRoles/create")]
         public async Task<ActionResult> CreateStaffRole(CreateStaffRoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -54,7 +59,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/StaffRole/editStaffRole/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staffRoles/edit/{id}")]
         public async Task<ActionResult> EditStaffRole(string id)
         {
             var StaffRole = await _StaffRoleService.GetByIdAsync(Guid.Parse(id));
@@ -65,6 +71,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staffRoles/edit")]
         public async Task<ActionResult> EditStaffRole(EditStaffRoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -79,7 +87,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/StaffRole/Activate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staffRoles/activate/{id}")]
         public async Task<IActionResult> Activate(string id)
         {
 
@@ -88,7 +97,8 @@ namespace FundriasingSystem.Controllers
             return Redirect("/StaffRole/viewStaffRole");
         }
 
-        [Route("/StaffRole/Deactivate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/staffRoles/deactivate/{id}")]
         public async Task<IActionResult> Deactivate(string id)
         {
 

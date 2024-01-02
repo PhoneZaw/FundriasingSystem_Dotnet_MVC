@@ -25,7 +25,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenseTypes")]
         public async Task<IActionResult> ViewExpenseTypeAsync()
         {
             var ExpenseType = await _ExpenseTypeService.GetAllExpenseTypesAsync();
@@ -33,6 +34,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenseTypes/create")]
         public ActionResult createExpenseType()
         {
             return View();
@@ -40,6 +43,8 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenseTypes/create")]
         public async Task<ActionResult> CreateExpenseType(CreateExpenseTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -55,7 +60,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/ExpenseType/editExpenseType/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenseTypes/edit/{id}")]
         public async Task<ActionResult> EditExpenseType(string id)
         {
             var ExpenseType = await _ExpenseTypeService.GetByIdAsync(Guid.Parse(id));
@@ -66,6 +72,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenseTypes/edit")]
         public async Task<ActionResult> EditExpenseType(EditExpenseTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -80,7 +88,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/ExpenseType/Activate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenseTypes/activate/{id}")]
         public async Task<IActionResult> Activate(string id)
         {
 
@@ -89,7 +98,8 @@ namespace FundriasingSystem.Controllers
             return Redirect("/ExpenseType/viewExpenseType");
         }
 
-        [Route("/ExpenseType/Deactivate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenseTypes/deactivate/{id}")]
         public async Task<IActionResult> Deactivate(string id)
         {
 

@@ -35,7 +35,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenses")]
         public async Task<IActionResult> ViewExpenseAsync()
         {
             var Expenses = await _ExpenseService.GetAllExpensesAsync();
@@ -55,6 +56,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenses/create")]
         [HttpGet]
         public async Task<ActionResult> createExpenseAsync()
         {
@@ -86,6 +88,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenses/create")]
         [HttpPost]
         public async Task<ActionResult> CreateExpense(CreateExpenseViewModel model)
         {
@@ -112,7 +115,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/Expense/editExpense/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenses/edit/{id}")]
         public async Task<ActionResult> EditExpense(string id)
         {
             var Expense = await _ExpenseService.GetByIdAsync(Guid.Parse(id));
@@ -145,6 +149,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/expenses/edit")]
         public async Task<ActionResult> EditExpense(EditExpenseViewModel model)
         {
             if (ModelState.IsValid)

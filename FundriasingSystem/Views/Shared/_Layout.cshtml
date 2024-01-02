@@ -19,11 +19,33 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Campaigns</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <form class="" style="display: flex; gap:2px;" action="/campaigns/search" method="post">
+                                <input type="text" class="form-control" name="search" value="" placeholder="Search" />
+                                <button class="text-dark btn btn-primary " style="color: white !important;">Search</button>
+                            </form>
+                            
                         </li>
+                    </ul>
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity is not null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/donors/edit/@User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value">@User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-primary text-white" style="color: white !important;" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-primary" style="color: white !important;" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

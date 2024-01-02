@@ -4,12 +4,14 @@
 
 @{
     ViewData["Title"] = "Campaign";
+
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
 
 <h2>Campaign List</h2>
 
-    <a href="/campaign/createCampaign" class="btn btn-primary">Create Campaign</a>
+    <a href="/admin/campaigns/create" class="btn btn-primary">Create Campaign</a>
 <div class="table-responsive">
 
 
@@ -59,15 +61,15 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="/Campaign/editCampaign/@Campaign.Id" class="btn btn-primary active">Edit</a>
+                                <a href="/admin/Campaigns/edit/@Campaign.Id" class="btn btn-primary active">Edit</a>
 
                                 @if (Campaign.Status == StatusEnum.Active.ToString())
                                 {
-                                    <a href="/Campaign/Deactivate/@Campaign.Id" class="btn btn-danger">Deactivate</a>
+                                    <a href="/admin/Campaigns/Deactivate/@Campaign.Id" class="btn btn-danger">Deactivate</a>
                                 }
                                 else
                                 {
-                                    <a href="/Campaign/Activate/@Campaign.Id" class="btn btn-danger">Activate</a>
+                                    <a href="/admin/Campaigns/Activate/@Campaign.Id" class="btn btn-danger">Activate</a>
                                 }
                             </div>
                         </td>

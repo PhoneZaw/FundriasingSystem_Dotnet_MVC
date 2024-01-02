@@ -31,7 +31,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/paymentMethods")]
         public async Task<IActionResult> ViewPaymentMethodAsync()
         {
             var PaymentMethod = await _PaymentMethodService.GetAllPaymentMethodsAsync();
@@ -39,6 +40,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/paymentMethods/create")]
         public ActionResult createPaymentMethod()
         {
             return View();
@@ -46,6 +49,8 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/paymentMethods/create")]
         public async Task<ActionResult> CreatePaymentMethod(CreatePaymentMethodViewModel model)
         {
             if (ModelState.IsValid)
@@ -68,7 +73,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/PaymentMethod/editPaymentMethod/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/paymentMethods/edit/{id}")]
         public async Task<ActionResult> EditPaymentMethod(string id)
         {
             var PaymentMethod = await _PaymentMethodService.GetByIdAsync(Guid.Parse(id));
@@ -79,6 +85,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/paymentMethods/edit")]
         public async Task<ActionResult> EditPaymentMethod(EditPaymentMethodViewModel model)
         {
             if (ModelState.IsValid)
@@ -93,7 +101,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/PaymentMethod/Activate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/paymentMethods/activate/{id}")]
         public async Task<IActionResult> Activate(string id)
         {
 
@@ -102,7 +111,8 @@ namespace FundriasingSystem.Controllers
             return Redirect("/PaymentMethod/viewPaymentMethod");
         }
 
-        [Route("/PaymentMethod/Deactivate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/paymentMethods/deactivate/{id}")]
         public async Task<IActionResult> Deactivate(string id)
         {
 

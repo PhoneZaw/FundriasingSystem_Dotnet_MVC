@@ -40,6 +40,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
+        [Route("/admin/campaigns/")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> ViewCampaignAsync()
         {
             var Campaign = await _CampaignService.GetAllCampaignsAsync();
@@ -55,6 +57,7 @@ namespace FundriasingSystem.Controllers
             return View(Campaign);
         }
 
+        [Route("/campaigns")]
         public async Task<IActionResult> CampaignListAsync([FromQuery] string search)
         {
             var Campaign = (await _CampaignService.GetAllCampaignsAsync()).Where(c => string.IsNullOrEmpty(search) || c.Title.Contains(search)).ToList();
@@ -69,7 +72,14 @@ namespace FundriasingSystem.Controllers
             return View(Campaign);
         }
 
-        [Route("/campaign/campaignDetail/{id}")]
+        [HttpPost]
+        [Route("/campaigns/search")]
+        public IActionResult SearchCampaign(string search)
+        {
+            return Redirect($"/campaigns?search={search}");
+        }
+
+        [Route("/campaign/{id}")]
         public async Task<IActionResult> CampaignDetailAsync(string id)
         {
             if(!Guid.TryParse(id, out var campaignGuid))
@@ -91,6 +101,7 @@ namespace FundriasingSystem.Controllers
 
         [Authorize(AuthenticationSchemes = "Admin")]
         [HttpGet]
+        [Route("/admin/campaigns/create")]
         public async Task<ActionResult> createCampaignAsync()
         {
             List<SelectListItem> campaignTypeItems = (await _campaignTypeService.GetAllCampaignTypesAsync()).ToList().ConvertAll(d =>
@@ -109,6 +120,7 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
+        [Route("/admin/campaigns/create")]
         [Authorize(AuthenticationSchemes = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CreateCampaign(CreateCampaignViewModel model)
@@ -145,7 +157,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/Campaign/editCampaign/{id}")]
+        [Route("/admin/campaigns/edit/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<ActionResult> EditCampaign(string id)
         {
             var Campaign = await _CampaignService.GetByIdAsync(Guid.Parse(id));
@@ -166,6 +179,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Route("/admin/campaigns/edit")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<ActionResult> EditCampaign(EditCampaignViewModel model)
         {
             if (ModelState.IsValid)
@@ -180,7 +195,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/Campaign/Activate/{id}")]
+        [Route("/admin/Campaigns/Activate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Activate(string id)
         {
 
@@ -189,7 +205,8 @@ namespace FundriasingSystem.Controllers
             return Redirect("/Campaign/viewCampaign");
         }
 
-        [Route("/Campaign/Deactivate/{id}")]
+        [Route("/admin/Campaigns/Deactivate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Deactivate(string id)
         {
 

@@ -53,6 +53,7 @@ namespace FundriasingSystem
                     //options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                     //options.SlidingExpiration = true;
                     //options.AccessDeniedPath = "/Forbidden";
+                    options.LoginPath = "/Admin/Login";
                 });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

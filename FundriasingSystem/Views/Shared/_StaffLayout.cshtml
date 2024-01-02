@@ -8,59 +8,55 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <div class="page">
-        <div class="sidebar">
-            <div class="top-row pl-4 navbar navbar-dark">
+    <div class="page" style="display:flex;">
+        <div class="sidebar bg-dark" style="flex: 0 0 300px; min-height: 100vh; color: white;">
+            <div class="top-row pl-4 navbar" style="background-color: #222; color: white; font-weight: bold;">
                 <a class="navbar-brand" href="">Fundraising System</a>
-                <button class="navbar-toggler">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
             </div>
-
             <div>
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/admin/staffroles">
+                        <a class="nav-link" href="/admin/staffroles">
                             <span class="oi oi-plus" aria-hidden="true"></span> Staff Roles
-                        </NavLink>
+                        </a>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/admin/staff">
+                        <a class="nav-link" href="/admin/staff">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Staff
-                        </NavLink>
+                        </a>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/admin/donors">
+                        <a class="nav-link" href="/admin/donors">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Donors
-                        </NavLink>
+                        </a>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/admin/campaigntypes">
+                        <a class="nav-link" href="/admin/campaigntypes">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> CampaignTypes
-                        </NavLink>
+                        </a>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/admin/campaigns">
+                        <a class="nav-link" href="/admin/campaigns">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Campaigns
-                        </NavLink>
+                        </a>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/admin/paymentmethods">
+                        <a class="nav-link" href="/admin/paymentmethods">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> PaymentMethods
-                        </NavLink>
+                        </a>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/admin/donations">
+                        <a class="nav-link" href="/admin/donations">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Donations
-                        </NavLink>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="main">
+        <div class="main" style="flex: auto;">
 
-            <div class="content px-4">
+            <div class="content px-4 pt-4">
                 @RenderBody()
             </div>
         </div>

@@ -42,6 +42,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/donations/")]
         public async Task<IActionResult> ViewDonationAsync()
         {
             var Donation = await _DonationService.GetAllDonationsAsync();
@@ -61,6 +63,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Cookies")]
+        [Route("/donations/donate")]
         [HttpGet]
         public async Task<ActionResult> createDonationAsync([FromQuery] CreateDonationViewModel donationQuery)
         {
@@ -93,6 +96,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Cookies")]
+        [Route("/donations/donate")]
         [HttpPost]
         public async Task<ActionResult> CreateDonation(CreateDonationViewModel model)
         {
@@ -123,8 +127,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/donation/verify/{id}")]
-        [Authorize(AuthenticationSchemes = "Cookies")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/donations/verify/{id}")]
         [HttpGet]
         public async Task<ActionResult> VerifyDonation(string id)
         {

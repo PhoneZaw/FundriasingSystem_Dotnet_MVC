@@ -24,7 +24,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaignTypes/")]
         public async Task<IActionResult> ViewCampaignTypeAsync()
         {
             var CampaignType = await _CampaignTypeService.GetAllCampaignTypesAsync();
@@ -32,6 +33,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaignTypes/create")]
         public ActionResult createCampaignType()
         {
             return View();
@@ -39,6 +42,8 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaignTypes/create")]
         public async Task<ActionResult> CreateCampaignType(CreateCampaignTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -54,7 +59,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/CampaignType/editCampaignType/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaignTypes/edit/{id}")]
         public async Task<ActionResult> EditCampaignType(string id)
         {
             var CampaignType = await _CampaignTypeService.GetByIdAsync(Guid.Parse(id));
@@ -65,6 +71,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaignTypes/edit")]
         public async Task<ActionResult> EditCampaignType(EditCampaignTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -79,7 +87,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/CampaignType/Activate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaignTypes/Activate/{id}")]
         public async Task<IActionResult> Activate(string id)
         {
 
@@ -88,7 +97,8 @@ namespace FundriasingSystem.Controllers
             return Redirect("/CampaignType/viewCampaignType");
         }
 
-        [Route("/CampaignType/Deactivate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaignTypes/deactivate/{id}")]
         public async Task<IActionResult> Deactivate(string id)
         {
 

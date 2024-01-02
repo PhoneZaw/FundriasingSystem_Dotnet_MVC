@@ -24,7 +24,8 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/donors/")]
         public async Task<IActionResult> ViewDonorAsync()
         {
             var Donor = await _DonorService.GetAllDonorAsync();
@@ -32,6 +33,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Cookies")]
+        [Route("/donors/register")]
         public ActionResult RegisterDonor()
         {
 
@@ -40,6 +43,8 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Cookies")]
+        [Route("/donors/register")]
         public async Task<ActionResult> RegisterDonor(CreateDonorViewModel model)
         {
             if (ModelState.IsValid)
@@ -55,7 +60,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/Donor/editDonor/{id}")]
+        [Authorize(AuthenticationSchemes = "Cookies")]
+        [Route("/donors/edit/{id}")]
         public async Task<ActionResult> EditDonor(string id)
         {
             var Donor = await _DonorService.GetByIdAsync(Guid.Parse(id));
@@ -66,6 +72,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Cookies")]
+        [Route("/donors/edit")]
         public async Task<ActionResult> EditDonor(EditDonorViewModel model)
         {
             if (ModelState.IsValid)
@@ -80,7 +88,8 @@ namespace FundriasingSystem.Controllers
             return View(model);
         }
 
-        [Route("/Donor/Activate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/donors/activate/{id}")]
         public async Task<IActionResult> Activate(string id)
         {
 
@@ -89,7 +98,8 @@ namespace FundriasingSystem.Controllers
             return Redirect("/Donor/viewDonor");
         }
 
-        [Route("/Donor/Deactivate/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/donors/deactivate/{id}")]
         public async Task<IActionResult> Deactivate(string id)
         {
 

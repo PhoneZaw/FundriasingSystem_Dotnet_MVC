@@ -32,6 +32,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
+        [Route("/admin/login")]
         public IActionResult AdminLogin()
         {
             return View();
@@ -39,6 +40,7 @@ namespace FundriasingSystem.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("/admin/login")]
         public async Task<IActionResult> AdminLogin(LoginViewModel model)
         {
 
@@ -78,6 +80,16 @@ namespace FundriasingSystem.Controllers
                 "Admin",
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
+
+            return Redirect("/");
+        }
+
+        [AllowAnonymous]
+        [Route("/admin/logout")]
+        public async Task<IActionResult> AdminLogout()
+        {
+            await HttpContext.SignOutAsync(
+                "Admin");
 
             return Redirect("/");
         }
@@ -130,14 +142,13 @@ namespace FundriasingSystem.Controllers
             return Redirect("/");
         }
 
-        [HttpGet("auth/logout")]
         [AllowAnonymous]
-        public async Task<IActionResult> Logout(string redirectUrl)
+        public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return Redirect(redirectUrl);
+            return Redirect("/");
         }
     }
 }
