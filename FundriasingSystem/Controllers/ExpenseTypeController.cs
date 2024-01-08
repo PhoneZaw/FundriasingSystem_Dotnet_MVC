@@ -73,7 +73,7 @@ namespace FundriasingSystem.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [Route("/admin/expenseTypes/edit")]
+        [Route("/admin/expenseTypes/edit/{id}")]
         public async Task<ActionResult> EditExpenseType(EditExpenseTypeViewModel model)
         {
             if (ModelState.IsValid)

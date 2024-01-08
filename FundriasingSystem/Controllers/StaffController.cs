@@ -27,7 +27,7 @@ namespace FundriasingSystem.Controllers
             _mapper = mapper;
         }
 
-        //[Authorize(AuthenticationSchemes = "Admin")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin")]
         [Route("/admin/staff")]
         public async Task<IActionResult> ViewStaffAsync()
@@ -43,7 +43,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = "Admin")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin/staff/create")]
         public async Task<ActionResult> createStaff()
         {
@@ -67,7 +67,7 @@ namespace FundriasingSystem.Controllers
 
 
         [HttpPost]
-        //[Authorize(AuthenticationSchemes = "Admin")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin/staff/create")]
         public async Task<ActionResult> CreateStaff(CreateStaffViewModel model)
         {
@@ -108,7 +108,7 @@ namespace FundriasingSystem.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [Route("/admin/staff/edit")]
+        [Route("/admin/staff/edit/{id}")]
         public async Task<ActionResult> EditStaff(EditStaffViewModel model)
         {
             if (ModelState.IsValid)

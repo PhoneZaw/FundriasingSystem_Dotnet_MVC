@@ -1,21 +1,23 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FundriasingSystem.Models.PaymentMethod
+namespace FundriasingSystem.Models.PaymentMethodModels
 {
     public class EditPaymentMethodViewModel
     {
-        [Required]
+        //[Required]
         public Guid Id { get; set; }
-        [Required]
+        //[Required]
         public string Status { get; set; }
-        [Required]
+        //[Required]
         public DateTime CreatedAt { get; set; }
         [Required]
         public string PaymentMethodName { get; set; }
         [Required]
+        public string Description { get; set; }
+        //[Required]
         public string PaymentMethodIconUrl { get; set; }
-        [Required]
+        //[Required]
         public bool IsVerificationRequired { get; set; }
     }
 }

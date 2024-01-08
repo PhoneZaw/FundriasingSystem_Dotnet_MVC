@@ -77,3 +77,22 @@ body {
     padding: 10px 10px;
     margin: 5px 10px;
 }
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.donate-btn {
+    background-color: #ff6a00;
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+.donate-btn:hover {
+    background-color: #e66205;
+    color: white;
+    font-weight: bold;
+    border: none;
+}

@@ -17,36 +17,73 @@
 
     <div class="mb-3">
         <label asp-for="DonationAmount" class="form-label">Donation Amount</label>
-        <input type="text" class="form-control" asp-for="DonationAmount" />
+        <input class="form-control" asp-for="DonationAmount" min="1000" />
         <span asp-validation-for="DonationAmount" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Remark" class="form-label">Remark</label>
-        <input type="text" class="form-control" asp-for="Remark" />
-        <span asp-validation-for="Remark" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
         <label asp-for="PaymentMethodId" class="form-label">Payment Method</label>
-        <select asp-for="PaymentMethodId" asp-items="@Model.PaymentMethods" class="form-control mb-3">
-        </select>
+        @foreach(var paymentMethod in Model.PaymentMethods)
+        {
+            <div class="form-check">
+                <input class="form-check-input payment-method" type="radio" asp-for="PaymentMethodId" value="@paymentMethod.Id" id="@paymentMethod.Id" name="PaymentMethodId" data-verification-required="@paymentMethod.IsVerificationRequired" />
+                <label class="form-check-label" for="@paymentMethod.Id">
+                    @paymentMethod.PaymentMethodName
+                </label>
+            </div>
+        }
         <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-3" id="cardNumberField">
         <label class="form-label">Card Number</label>
         <input type="number" class="form-control" />
     </div>
 
-    <div class="mb-3">
+    <div class="mb-3" id="voucherFileField">
         <label asp-for="PaymentVoucherFile" class="form-label">Payment Voucher</label>
-        <input asp-for="PaymentVoucherFile" />
+        <input asp-for="PaymentVoucherFile" class="form-control-file" />
         <span asp-validation-for="PaymentVoucherFile" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Remark" class="form-label">Remark</label>
+        <input class="form-control" asp-for="Remark" />
+        <span asp-validation-for="Remark" class="text-danger"></span>
     </div>
 
 
     <div class="">
-        <button type="submit" class="btn btn-primary">Donate</button>
+        <button type="submit" class="btn btn-primary donate-btn">Donate</button>
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#cardNumberField").hide();
+            $("#voucherFileField").hide();
+
+            $(".payment-method").change(function () {
+                var isVerificationRequired = $(this).data("verification-required");
+                console.log(isVerificationRequired)
+                if (isVerificationRequired === "True") {
+                    $("#cardNumberField input").prop("required", false);
+                    $("#cardNumberField").hide();
+                } else {
+                    $("#cardNumberField").show();
+                    $("#cardNumberField input").prop("required", "true");
+                    
+                }
+
+                if (isVerificationRequired === "True") {
+                    $("#voucherFileField").show();
+                    $("#voucherFileField input").prop("required", "true");
+                } else {
+                    $("#voucherFileField input").prop("required", false);
+                    $("#voucherFileField").hide();
+                }
+            });
+        });
+    </script>
+}

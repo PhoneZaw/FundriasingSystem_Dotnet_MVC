@@ -8,7 +8,7 @@ using FundriasingSystem.Models.DonationModels;
 using FundriasingSystem.Models.DonorModels;
 using FundriasingSystem.Models.Expense;
 using FundriasingSystem.Models.ExpenseType;
-using FundriasingSystem.Models.PaymentMethod;
+using FundriasingSystem.Models.PaymentMethodModels;
 using FundriasingSystem.Models.Staff;
 using FundriasingSystem.Models.StaffRole;
 

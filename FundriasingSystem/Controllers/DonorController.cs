@@ -69,9 +69,21 @@ namespace FundriasingSystem.Controllers
             return View(editModel);
         }
 
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = "Cookies")]
+        [Route("/donors/{id}")]
+        public async Task<ActionResult> DonorProfile(string id)
+        {
+            var Donor = await _DonorService.GetByIdAsync(Guid.Parse(id));
+
+            var editModel = _mapper.Map<EditDonorViewModel>(Donor);
+
+            return View(editModel);
+        }
+
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Cookies")]
-        [Route("/donors/edit")]
+        [Route("/donors/edit/{id}")]
         public async Task<ActionResult> EditDonor(EditDonorViewModel model)
         {
             if (ModelState.IsValid)

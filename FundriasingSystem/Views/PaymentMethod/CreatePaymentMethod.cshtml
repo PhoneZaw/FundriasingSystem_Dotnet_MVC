@@ -1,9 +1,12 @@
-﻿@using FundriasingSystem.Models.PaymentMethod;
+﻿@using FundriasingSystem.Models.PaymentMethodModels;
 @model CreatePaymentMethodViewModel
 
 @{
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
+
+<h2>Create Payment Method</h2>
+<br />
 
 <form asp-action="CreatePaymentMethod" asp-controller="PaymentMethod" method="post" enctype="multipart/form-data">
 
@@ -14,14 +17,20 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <input type="text" class="form-control" asp-for="Description" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="IconFile" class="form-label">Images</label>
-        <input class="form-control" asp-for="IconFile" multiple />
+        <input class="form-control-file" asp-for="IconFile" multiple />
         <span asp-validation-for="IconFile" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <input asp-for="IsVerificationRequired" />
-        <label asp-for="IsVerificationRequired" class="form-label">VerificationRequired</label>
+        <input class="form-check-inline" asp-for="IsVerificationRequired" />
+        <label asp-for="IsVerificationRequired" class="form-check-label">VerificationRequired</label>
         <span asp-validation-for="IsVerificationRequired" class="text-danger"></span>
     </div>
 

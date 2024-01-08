@@ -1,6 +1,7 @@
 ﻿@using FundriasingSystem.Models.Account;
 @model LoginViewModel
 
+<h2>Donor Login</h2>
 
 <form asp-action="Login" asp-controller="Account" method="post">
 
@@ -14,6 +15,10 @@
         <label asp-for="Password" class="form-label">Password</label>
         <input type="password" class="form-control" asp-for="Password" />
         <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="text-right">
+        Don't have an account? <a asp-action="RegisterDonor" asp-controller="Donor">Register</a>
     </div>
 
     <div class="">

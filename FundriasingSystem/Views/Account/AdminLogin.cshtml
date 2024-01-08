@@ -1,6 +1,11 @@
 ﻿@using FundriasingSystem.Models.Account;
 @model LoginViewModel
 
+@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<h2>Admin Login</h2>
 
 <form asp-action="AdminLogin" asp-controller="Account" method="post">
 

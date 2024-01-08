@@ -5,17 +5,23 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<form asp-action="CreateStaff" asp-controller="Staff" method="post">
+<h2>Create Staff</h2>
+<br />
 
-        <div class="mb-3">
+<form asp-action="CreateStaff" asp-controller="Staff" method="post">
+    <div class="row">
+
+        <div class="mb-3 col">
             <label asp-for="FirstName" class="form-label">First Name</label>
             <input type="text" class="form-control" asp-for="FirstName" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 col">
             <label asp-for="LastName" class="form-label">Last Name</label>
             <input type="text" class="form-control" asp-for="LastName" />
         </div>
+
+    </div>
         <div class="mb-3">
             <label class="form-label">Email</label>
             <input type="email" class="form-control" asp-for="Email" />
@@ -40,7 +46,6 @@
         <div class="mb-3">
             <label class="form-label">Staff Role</label>
         <select asp-for="RoleId" asp-items="@Model.Roles" class="form-control mb-3">
-            <option value="">Please Select Option</option>
         </select>
         <span asp-validation-for="RoleId" class="text-danger"></span>
         </div>

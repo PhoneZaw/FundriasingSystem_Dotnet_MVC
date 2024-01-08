@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FundraisingApp.Entities;
 using FundraisingApp.Services;
-using FundriasingSystem.Models.PaymentMethod;
+using FundriasingSystem.Models.PaymentMethodModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -86,7 +86,7 @@ namespace FundriasingSystem.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [Route("/admin/paymentMethods/edit")]
+        [Route("/admin/paymentMethods/edit/{id}")]
         public async Task<ActionResult> EditPaymentMethod(EditPaymentMethodViewModel model)
         {
             if (ModelState.IsValid)

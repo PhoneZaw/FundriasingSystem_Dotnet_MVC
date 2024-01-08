@@ -72,7 +72,7 @@ namespace FundriasingSystem.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [Route("/admin/campaignTypes/edit")]
+        [Route("/admin/campaignTypes/edit/{id}")]
         public async Task<ActionResult> EditCampaignType(EditCampaignTypeViewModel model)
         {
             if (ModelState.IsValid)

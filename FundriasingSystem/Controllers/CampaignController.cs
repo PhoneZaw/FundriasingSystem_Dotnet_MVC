@@ -24,18 +24,21 @@ namespace FundriasingSystem.Controllers
         private readonly CampaignService _CampaignService;
         private readonly CampaignTypeService _campaignTypeService;
         private readonly StaffService _staffService;
+        private readonly DonationService _donationService;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMapper _mapper;
 
         public CampaignController(CampaignService CampaignService,
             CampaignTypeService CampaignTypeService,
             StaffService staffService,
+            DonationService donationService,
             IWebHostEnvironment hostEnvironment,
             IMapper mapper)
         {
             _CampaignService = CampaignService;
             _campaignTypeService = CampaignTypeService;
             _staffService = staffService;
+            _donationService = donationService;
             _hostEnvironment = hostEnvironment;
             _mapper = mapper;
         }
@@ -60,14 +63,24 @@ namespace FundriasingSystem.Controllers
         [Route("/campaigns")]
         public async Task<IActionResult> CampaignListAsync([FromQuery] string search)
         {
-            var Campaign = (await _CampaignService.GetAllCampaignsAsync()).Where(c => string.IsNullOrEmpty(search) || c.Title.Contains(search)).ToList();
+            var Campaign = (await _CampaignService.GetAllCampaignsAsync())
+                .Where(c => c.TargetDate >= DateTime.Now)
+                .Where(c => string.IsNullOrEmpty(search) || c.Title.Contains(search))
+                .ToList();
+
             var CampaignType = await _campaignTypeService.GetAllCampaignTypesAsync();
+
+            var Donations = await _donationService.GetAllDonationsAsync();
 
             foreach(var item in Campaign)
             {
                 item.CampaignType = CampaignType.FirstOrDefault(x => x.Id == item.CampaignTypeId);
                 item.Images = $"/img/{item.Images?.Split(',').FirstOrDefault()}";
+
+                item.Description = Donations.Where(d => d.CampaignId == item.Id).Sum(d => d.DonationAmount).ToString();
             }
+
+            Campaign = Campaign.Where(c => c.TargetAmount > Convert.ToDecimal(c.Description)).ToList();
 
             return View(Campaign);
         }
@@ -96,6 +109,11 @@ namespace FundriasingSystem.Controllers
                 Campaign.Images = string.Join(",", Campaign.Images?.Split(',').Select(i => $"/img/{i}"));
             }
 
+            var Donations = await _donationService.GetAllDonationsByCampaignAsync(Campaign.Id);
+
+            ViewData["donationCount"] = Donations.Count();
+            ViewData["CurrentAmount"] = Donations.Sum(d => d.DonationAmount);
+
             return View(Campaign);
         }
 
@@ -115,7 +133,9 @@ namespace FundriasingSystem.Controllers
 
             var model = new CreateCampaignViewModel()
             {
-                CampaignTypes = campaignTypeItems
+                CampaignTypes = campaignTypeItems,
+                TargetDate = DateTime.Now.AddDays(30),
+                TargetAmount = 10000
             };
             return View(model);
         }
@@ -157,8 +177,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/admin/campaigns/edit/{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaigns/edit/{id}")]
         public async Task<ActionResult> EditCampaign(string id)
         {
             var Campaign = await _CampaignService.GetByIdAsync(Guid.Parse(id));
@@ -179,8 +199,8 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpPost]
-        [Route("/admin/campaigns/edit")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        [Route("/admin/campaigns/edit/{id}")]
         public async Task<ActionResult> EditCampaign(EditCampaignViewModel model)
         {
             if (ModelState.IsValid)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FundraisingApp.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace FundriasingSystem.Models.DonationModels
     public class CreateDonationViewModel
     {
         [Required]
-        public int DonationAmount { get; set; }
+        public int DonationAmount { get; set; } = 1000;
         public IFormFile PaymentVoucherFile { get; set; }
         public string Remark { get; set; }
         [Required]
@@ -17,6 +18,6 @@ namespace FundriasingSystem.Models.DonationModels
         [Required]
         public Guid PaymentMethodId { get; set; }
         public List<SelectListItem> Campaigns { get; set; }
-        public List<SelectListItem> PaymentMethods { get; set; }
+        public IEnumerable<PaymentMethod> PaymentMethods { get; set; }
     }
 }

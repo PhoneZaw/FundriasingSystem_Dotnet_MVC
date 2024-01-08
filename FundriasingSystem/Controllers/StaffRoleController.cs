@@ -72,7 +72,7 @@ namespace FundriasingSystem.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [Route("/admin/staffRoles/edit")]
+        [Route("/admin/staffRoles/edit/{id}")]
         public async Task<ActionResult> EditStaffRole(EditStaffRoleViewModel model)
         {
             if (ModelState.IsValid)

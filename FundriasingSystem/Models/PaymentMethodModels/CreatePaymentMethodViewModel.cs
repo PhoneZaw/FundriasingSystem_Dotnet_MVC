@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace FundriasingSystem.Models.PaymentMethod
+namespace FundriasingSystem.Models.PaymentMethodModels
 {
     public class CreatePaymentMethodViewModel
     {
         [Required]
         public string PaymentMethodName { get; set; }
+        [Required]
+        public string Description { get; set; }
         [Required]
         public IFormFile IconFile { get; set; }
         [Required]

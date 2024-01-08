@@ -76,19 +76,10 @@ namespace FundriasingSystem.Controllers
                 };
             });
 
-            List<SelectListItem> paymentMethodItems = (await _paymentMethodService.GetAllPaymentMethodsAsync()).ToList().ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.PaymentMethodName,
-                    Value = d.Id.ToString()
-                };
-            });
-
             var model = new CreateDonationViewModel()
             {
                 Campaigns = campaignItems,
-                PaymentMethods = paymentMethodItems,
+                PaymentMethods = await _paymentMethodService.GetAllPaymentMethodsAsync(),
                 DonationAmount = donationQuery.DonationAmount,
                 CampaignId = donationQuery.CampaignId
             };

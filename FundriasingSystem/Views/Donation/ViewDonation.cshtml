@@ -20,6 +20,7 @@
                 <th>DonationAmount</th>
                 <th>PaymentMethod</th>
                 <th>Remark</th>
+                <th>Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -43,6 +44,9 @@
                         </td>
                         <td>
                             @Donation.Remark
+                        </td>
+                        <td>
+                            @Donation.CreatedAt.ToString("dd-MM-yyyy")
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">

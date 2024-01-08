@@ -43,20 +43,28 @@ namespace FundriasingSystem.Controllers
         [Route("/admin/login")]
         public async Task<IActionResult> AdminLogin(LoginViewModel model)
         {
+            if (ModelState.IsValid)
+            {
 
-            var staff = (await _staffRepository.GetAllAsync()).FirstOrDefault(s => s.Email == model.Email);
+                var staff = (await _staffRepository.GetAllAsync()).FirstOrDefault(s => s.Email == model.Email);
 
-            if (staff is null)
-                throw new DomainException("Email not found");
+                if (staff is null)
+                {
+                    ModelState.AddModelError(nameof(model.Email), "Email is not found");
+                    return View(model);
+                }
 
-            var hashPassword = HashHelper.GetHash(model.Password);
+                var hashPassword = HashHelper.GetHash(model.Password);
 
-            if (staff.HashPassword != hashPassword)
-                throw new DomainException("Password is incorrect");
+                if (staff.HashPassword != hashPassword)
+                {
+                    ModelState.AddModelError(nameof(model.Password), "Password is incorrect");
+                    return View(model);
+                }
 
-            var role = await _staffRoleRepository.GetByIdAsync(staff.RoleId);
+                var role = await _staffRoleRepository.GetByIdAsync(staff.RoleId);
 
-            var claims = new List<Claim>
+                var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, staff.Email),
                 new Claim("UserId", staff.Id.ToString()),
@@ -64,24 +72,27 @@ namespace FundriasingSystem.Controllers
                 new Claim(ClaimTypes.Role, role != null ? role.RoleName : ""),
             };
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims, "Admin");
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, "Admin");
 
-            var authProperties = new AuthenticationProperties
-            {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(10),
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(10),
 
-                IsPersistent = true,
+                    IsPersistent = true,
 
-                IssuedUtc = DateTime.Now,
-            };
+                    IssuedUtc = DateTime.Now,
+                };
 
-            await HttpContext.SignInAsync(
-                "Admin",
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+                await HttpContext.SignInAsync(
+                    "Admin",
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
 
-            return Redirect("/");
+                return Redirect("/");
+            }
+
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -104,17 +115,26 @@ namespace FundriasingSystem.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var donor = (await _donorRepository.GetAllAsync()).FirstOrDefault(d => d.Email == model.Email);
+            if (ModelState.IsValid)
+            {
+                var donor = (await _donorRepository.GetAllAsync()).FirstOrDefault(d => d.Email == model.Email);
 
-            if (donor is null)
-                throw new DomainException("Email not found");
+                if (donor is null)
+                {
 
-            var hashPassword = HashHelper.GetHash(model.Password);
+                    ModelState.AddModelError(nameof(model.Email), "Email is not found");
+                    return View(model);
+                }
 
-            if (donor.HashPassword != hashPassword)
-                throw new DomainException("Password is incorrect");
+                var hashPassword = HashHelper.GetHash(model.Password);
 
-            var claims = new List<Claim>
+                if (donor.HashPassword != hashPassword)
+                {
+                    ModelState.AddModelError(nameof(model.Password), "Password is incorrect");
+                    return View(model);
+                }
+
+                var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, donor.Email),
                 new Claim("UserId", donor.Id.ToString()),
@@ -122,24 +142,27 @@ namespace FundriasingSystem.Controllers
                 new Claim(ClaimTypes.Role, "donor"),
             };
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var authProperties = new AuthenticationProperties
-            {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(10),
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(10),
 
-                IsPersistent = true,
+                    IsPersistent = true,
 
-                IssuedUtc = DateTime.Now,
-            };
+                    IssuedUtc = DateTime.Now,
+                };
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
 
-            return Redirect("/");
+                return Redirect("/");
+            }
+
+            return View(model);
         }
 
         [AllowAnonymous]

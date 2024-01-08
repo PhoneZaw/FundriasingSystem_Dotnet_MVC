@@ -20,30 +20,41 @@ namespace FundriasingSystem.Controllers
         private readonly ExpenseTypeService _expenseTypeService;
         private readonly CampaignService _campaignService;
         private readonly StaffService _staffService;
+        private readonly DonationService _donationService;
         private readonly IMapper _mapper;
 
         public ExpenseController(ExpenseService ExpenseService,
             ExpenseTypeService expenseTypeService,
             CampaignService campaignService,
             StaffService staffService,
+            DonationService donationService,
             IMapper mapper)
         {
             _ExpenseService = ExpenseService;
             _expenseTypeService = expenseTypeService;
             _campaignService = campaignService;
             _staffService = staffService;
+            _donationService = donationService;
             _mapper = mapper;
         }
 
         [Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin/expenses")]
-        public async Task<IActionResult> ViewExpenseAsync()
+        public async Task<IActionResult> ViewExpenseAsync([FromQuery] Guid? CampaignId)
         {
-            var Expenses = await _ExpenseService.GetAllExpensesAsync();
-
             var Campaigns = await _campaignService.GetAllCampaignsAsync();
+
+            if (CampaignId is null)
+            {
+                CampaignId = Campaigns.FirstOrDefault()?.Id;
+            }
+
+            var Expenses = (await _ExpenseService.GetAllExpensesAsync()).Where(e => e.CampaignId == CampaignId);
+
             var ExpenseTypes = await _expenseTypeService.GetAllExpenseTypesAsync();
             var Staff = await _staffService.GetAllStaffAsync();
+
+            var donations = await _donationService.GetAllDonationsByCampaignAsync(CampaignId.Value);
 
             foreach (var item in Expenses)
             {
@@ -52,13 +63,19 @@ namespace FundriasingSystem.Controllers
                 //item.Staff = Staff.FirstOrDefault(x => x.Id == item.StaffId);
             }
 
+
+            ViewData["CampaignList"] = Campaigns;
+            ViewData["CampaignId"] = CampaignId;
+            ViewData["totalDonationAmount"] = donations.Sum(d => d.DonationAmount);
+            ViewData["campaignTargetAmount"] = Campaigns.FirstOrDefault(x => x.Id == CampaignId).TargetAmount;
+
             return View(Expenses);
         }
 
         [Authorize(AuthenticationSchemes = "Admin")]
         [Route("/admin/expenses/create")]
         [HttpGet]
-        public async Task<ActionResult> createExpenseAsync()
+        public async Task<ActionResult> createExpenseAsync([FromQuery] Guid CampaignId)
         {
             List<SelectListItem> expenseTypeItems = (await _expenseTypeService.GetAllExpenseTypesAsync()).ToList().ConvertAll(d =>
             {
@@ -81,7 +98,8 @@ namespace FundriasingSystem.Controllers
             var model = new CreateExpenseViewModel()
             {
                 Campaigns = campaignItems,
-                ExpenseTypes = expenseTypeItems
+                ExpenseTypes = expenseTypeItems,
+                CampaignId = CampaignId
             };
 
             return View(model);
@@ -150,7 +168,7 @@ namespace FundriasingSystem.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [Route("/admin/expenses/edit")]
+        [Route("/admin/expenses/edit/{id}")]
         public async Task<ActionResult> EditExpense(EditExpenseViewModel model)
         {
             if (ModelState.IsValid)

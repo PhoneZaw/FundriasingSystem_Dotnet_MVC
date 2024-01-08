@@ -1,17 +1,90 @@
 ﻿@using FundriasingSystem.Models.Certificate;
 @model CertificateViewModel
+@{
+    Layout = "";
+}
+<a href="/" class="back-btn">Back</a>
+<br />
+<br />
+<div class="container">
+    <h2>Certificate of Donation</h2>
 
-<h2>Certificate</h2>
+    <p>This certified that</p>
 
-<p>Issued to - @Model.Donor.GetFullName()</p>
+    <h2>@Model.Donor.GetFullName()</h2>
 
-<p>Campaign - @Model.Campaign.Title</p>
+    <p class="text-center">
+        On behalf of <span class="amount">@Model.TotalAmount MMK</span>  Donation <br />
+        to the
+    </p>
+    <h2>@Model.Campaign.Title</h2>
 
-<p>Amount - @Model.TotalAmount</p>
+    @foreach(var item in Model.Donations)
+    {
+        <p>Donate <b>@item.DonationAmount MMK</b> at @item.CreatedAt</p>
+    }
 
-<p>Issued on - @Model.CreatedAt</p>
+    <div class="cert-footer">
+        <div>
+            <p><b>Better Together Organization</b></p>
+            <hr class="hr" />
+            <p>Issued And Certified By</p>
+        </div>
+        <div>
+            <p>@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+            <hr class="hr" />
+            <p>Date</p>
+        </div>
+    </div>
+</div>
+<style>
+    .back-btn {
+        position: absolute;
+        inset: 0;
+        width: fit-content;
+        height: fit-content;
+        padding: 10px 20px;
+        background-color: #111;
+        color: #fff;
+        text-decoration: none;
+    }
 
-@foreach(var item in Model.Donations)
-{
-    <p>Donate @item.DonationAmount at @item.CreatedAt</p>
-})
+    .container {
+        margin: auto;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        flex-direction: column;
+    }
+    .container p {
+        margin-top: 0;
+    }
+    .container h2{
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 3rem;
+        margin: 1.25rem 0;
+    }
+
+    .container .amount {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .text-center {
+        text-align: center;
+        margin: 0;
+    }
+    .hr {
+        width: 250px;
+    }
+
+    .cert-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-width: 900px;
+    }
+    .cert-footer p{
+        text-align: center;
+    }
+</style>

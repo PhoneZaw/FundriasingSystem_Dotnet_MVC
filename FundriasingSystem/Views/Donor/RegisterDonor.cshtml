@@ -3,18 +3,22 @@
 
 @{
 }
-
+<h2>Donor Registration</h2>
+<br />
 <form asp-action="RegisterDonor" asp-controller="Donor" method="post">
 
-    <div class="mb-3">
-        <label asp-for="FirstName" class="form-label">First Name</label>
-        <input type="text" class="form-control" asp-for="FirstName" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+    <div class="row">
+        <div class="mb-3 col">
+            <label asp-for="FirstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" asp-for="FirstName" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="mb-3 col">
+            <label asp-for="LastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" asp-for="LastName" />
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="LastName" class="form-label">Last Name</label>
-        <input type="text" class="form-control" asp-for="LastName" />
-    </div>
+    
     <div class="mb-3">
         <label class="form-label">Email</label>
         <input type="email" class="form-control" asp-for="Email" />

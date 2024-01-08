@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
+<h2>Edit Campaign</h2>
+<br />
+
 <form asp-action="EditCampaign" asp-controller="Campaign" method="post">
 
 
@@ -35,7 +38,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="Images" class="form-label">Images</label>
-        <input class="form-control" asp-for="Images" />
+        <input class="form-control-file" asp-for="Images" />
         <span asp-validation-for="Images" class="text-danger"></span>
     </div>
 

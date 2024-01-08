@@ -18,6 +18,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Description</th>
                 <th>IsVerificationRequired</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -31,6 +32,9 @@
                     <tr>
                         <td>
                             @PaymentMethod.PaymentMethodName
+                        </td>
+                        <td>
+                            @PaymentMethod.Description
                         </td>
                         <td>
                             @PaymentMethod.IsVerificationRequired

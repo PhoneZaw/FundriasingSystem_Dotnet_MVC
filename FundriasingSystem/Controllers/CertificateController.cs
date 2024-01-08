@@ -31,7 +31,7 @@ namespace FundriasingSystem.Controllers
         }
 
         [HttpGet]
-        [Route("/certificate/viewCertificate/{id}")]
+        [Route("/certificates/{id}")]
         public async Task<IActionResult> ViewCertificateAsync(Guid id)
         {
             var certificate = await _certificateService.GetByIdAsync(id);

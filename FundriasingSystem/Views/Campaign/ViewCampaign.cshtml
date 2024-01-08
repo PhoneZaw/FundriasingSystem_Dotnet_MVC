@@ -39,7 +39,9 @@
                             @Campaign.Title
                         </td>
                         <td>
-                            @Campaign.Description
+                            <p class="limit-line">
+                                @Campaign.Description
+                            </p>
                         </td>
                         <td>
                             @Campaign.TargetAmount
@@ -53,8 +55,11 @@
                         <td>
                             @Campaign.Staff.FirstName @Campaign.Staff.LastName
                         </td>
-                        <td>
-                            @Campaign.Images
+                        <td class="img-group">
+                            @foreach(var imagePath in Campaign.Images?.Split(","))
+                            {
+                                <img src="/img/@imagePath" class="campaign-image" />
+                            }
                         </td>
                         <td>
                             @Campaign.Status
@@ -84,3 +89,25 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    .img-group {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .campaign-image {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        margin-right: 3px;
+    }
+    .limit-line {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+</style>
