@@ -46,7 +46,7 @@ namespace FundriasingSystem.Controllers
         [Route("/admin/donations/")]
         public async Task<IActionResult> ViewDonationAsync()
         {
-            var Donation = await _DonationService.GetAllDonationsAsync();
+            var Donation = await _DonationService.GetAllDonationsAsync(true);
 
             var Donors = await _donorService.GetAllDonorAsync();
             var Campaigns = await _campaignService.GetAllCampaignsAsync();
@@ -75,6 +75,8 @@ namespace FundriasingSystem.Controllers
                     Value = d.Id.ToString()
                 };
             });
+
+            var paymentMethods = await _paymentMethodService.GetAllPaymentMethodsAsync();
 
             var model = new CreateDonationViewModel()
             {
@@ -110,12 +112,26 @@ namespace FundriasingSystem.Controllers
                     entity.PaymentVoucherUrl = uniFileName;
                 }
 
-                await _DonationService.CreateDonationAsync(entity);
+                var donation = await _DonationService.CreateDonationAsync(entity);
 
-                return RedirectToAction("CampaignList", "Campaign");
+                if (donation.IsVerified)
+                {
+                    return Redirect($"/postDonation?certificateId={donation.CertificateId}");
+                }
+                else
+                {
+                    return Redirect($"/postDonation");
+                }
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("/postDonation")]
+        public async Task<ActionResult> PostDonationAsync([FromQuery]Guid? certificateId)
+        {
+            return View(certificateId);
         }
 
         [Authorize(AuthenticationSchemes = "Admin")]

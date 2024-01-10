@@ -68,6 +68,7 @@ namespace FundriasingSystem
             services.AddScoped<ExpenseTypeService>();
             services.AddScoped<ExpenseService>();
             services.AddScoped<CertificateService>();
+            services.AddScoped<SuggestionService>();
 
             services.AddHttpContextAccessor();
 

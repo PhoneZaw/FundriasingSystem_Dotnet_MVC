@@ -25,6 +25,8 @@ namespace FundriasingSystem.Controllers
         private readonly CampaignTypeService _campaignTypeService;
         private readonly StaffService _staffService;
         private readonly DonationService _donationService;
+        private readonly SuggestionService _suggestionService;
+        private readonly DonorService _donorService;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMapper _mapper;
 
@@ -32,6 +34,8 @@ namespace FundriasingSystem.Controllers
             CampaignTypeService CampaignTypeService,
             StaffService staffService,
             DonationService donationService,
+            SuggestionService suggestionService,
+            DonorService donorService,
             IWebHostEnvironment hostEnvironment,
             IMapper mapper)
         {
@@ -39,6 +43,8 @@ namespace FundriasingSystem.Controllers
             _campaignTypeService = CampaignTypeService;
             _staffService = staffService;
             _donationService = donationService;
+            _suggestionService = suggestionService;
+            _donorService = donorService;
             _hostEnvironment = hostEnvironment;
             _mapper = mapper;
         }
@@ -102,17 +108,45 @@ namespace FundriasingSystem.Controllers
 
             var Campaign = await _CampaignService.GetByIdAsync(campaignGuid);
 
+            if(Campaign is null)
+            {
+                return NotFound();
+            }
+
             Campaign.CampaignType = await _campaignTypeService.GetByIdAsync(Campaign.CampaignTypeId);
+
+            var donors = await _donorService.GetAllDonorAsync();
 
             if(Campaign.Images is not null)
             {
                 Campaign.Images = string.Join(",", Campaign.Images?.Split(',').Select(i => $"/img/{i}"));
             }
 
-            var Donations = await _donationService.GetAllDonationsByCampaignAsync(Campaign.Id);
+            var donations = await _donationService.GetAllDonationsByCampaignAsync(Campaign.Id);
 
-            ViewData["donationCount"] = Donations.Count();
-            ViewData["CurrentAmount"] = Donations.Sum(d => d.DonationAmount);
+            foreach (var item in donations)
+            {
+                item.Donor = donors.FirstOrDefault();
+            }
+
+            var suggestions = await _suggestionService.GetAllSuggestionsByCampaignIdAsync(Campaign.Id);
+
+            foreach (var item in suggestions)
+            {
+                item.Donor = donors.FirstOrDefault(d => d.Id == item.DonorId);
+
+                item.TimeDiff = $"{(int)(DateTime.Now - item.CreatedAt).TotalMinutes} min";
+
+                item.TotalDonationAmount = donations.Where(d => d.CampaignId == Campaign.Id && d.DonorId == item.DonorId).Sum(d => d.DonationAmount);
+            }
+
+            ViewData["suggestions"] = suggestions;
+
+            ViewData["donations"] = donations.Take(3).ToList();
+
+            ViewData["donationCount"] = donations.Count();
+
+            ViewData["CurrentAmount"] = donations.Sum(d => d.DonationAmount);
 
             return View(Campaign);
         }

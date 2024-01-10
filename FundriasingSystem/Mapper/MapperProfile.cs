@@ -11,6 +11,7 @@ using FundriasingSystem.Models.ExpenseType;
 using FundriasingSystem.Models.PaymentMethodModels;
 using FundriasingSystem.Models.Staff;
 using FundriasingSystem.Models.StaffRole;
+using FundriasingSystem.Models.SuggestionModels;
 
 namespace FundraisingApp.Mapper
 {
@@ -53,6 +54,10 @@ namespace FundraisingApp.Mapper
             CreateMap<EditExpenseViewModel, Expense>().ReverseMap();
 
             CreateMap<Certificate, CertificateViewModel>();
+
+            CreateMap<Suggestion, SuggestionViewModel>();
+
+            CreateMap<CreateSuggestionViewModel, Suggestion>();
         }
     }
 }

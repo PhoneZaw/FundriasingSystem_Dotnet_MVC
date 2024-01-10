@@ -20,5 +20,6 @@ namespace FundriasingSystem.Data
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
+        public DbSet<Suggestion> Suggestions { get; set; }
     }
 }

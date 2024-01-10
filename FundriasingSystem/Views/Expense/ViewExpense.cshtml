@@ -35,9 +35,8 @@
         </select>
     </div>
     <br />
-    
 
-    <a href="/admin/Expenses/create?CampaignId=@CampaignId" class="btn btn-primary ">Create Expense</a>
+    <a href="/admin/Expenses/create?CampaignId=@CampaignId" class="btn btn-primary ">Add Expense</a>
 </div>
 
 
@@ -47,40 +46,12 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Type</th>
+                <th>Expense Type</th>
                 <th>Amount (MMK)</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            <tr>
-                <td>
-                    Target Amount
-                </td>
-                <td>Income</td>
-                <td>
-                    @campaignTargetAmount
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>
-                    Received Amount
-                </td>
-                <td>Income</td>
-                <td>
-                    @totalDonationAmount
-                </td>
-                <td></td>
-            </tr>
-            <tr class="border-top border-dark">
-                <td>
-                    <b>Expenses</b>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
             @if (Model is not null && Model.Any())
             {
                 @foreach (var Expense in Model)
@@ -94,7 +65,9 @@
                             @Expense.ExpenseType.ExpenseTypeName
                         </td>
                         <td>
-                            @Expense.Amount
+                            <b style="color:darkred;">
+                                @Expense.Amount
+                            </b>
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
@@ -121,7 +94,19 @@
                 </td>
                 <td></td>
                 <td>
-                    <b>@totalExpenses</b>
+                    <b style="color:darkred;">@totalExpenses</b>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Received Amount</b>
+                </td>
+                <td>Income</td>
+                <td>
+                    <b style="color:green;">
+                        @totalDonationAmount
+                    </b>
                 </td>
                 <td></td>
             </tr>
@@ -132,6 +117,19 @@
                 <td></td>
                 <td>
                     @actualBudgetLeft
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Target Amount</b>
+                </td>
+                <td>Income</td>
+                <td>
+                    <b style="color:green;">
+                        @campaignTargetAmount
+
+                    </b>
                 </td>
                 <td></td>
             </tr>

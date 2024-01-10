@@ -1,15 +1,18 @@
-﻿@using FundriasingSystem.Models.DonorModels;
+﻿@using FundraisingApp.Enums;
+@using FundriasingSystem.Models.Certificate;
+@using FundriasingSystem.Models.DonorModels;
 @model EditDonorViewModel
 
 @{
-}
 
-<h2>Edit Donor Form</h2>
-<br />
+    var certificates = ViewData["Certificates"] as List<CertificateViewModel>;
+}
+<h2 class="ml-5">Donor Profile</h2>
 
 <form asp-action="EditDonor" asp-controller="Donor" method="post">
     
     <input asp-for="Id" hidden/>
+    <input asp-for="Status" hidden/>
     <input asp-for="CreatedAt" hidden/>
     <input asp-for="HashPassword" hidden/>
 
@@ -38,15 +41,6 @@
         <span asp-validation-for="PhoneNo" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select asp-for="Status" class="form-control mb-3">
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-        </select>
-        <span asp-validation-for="Status" class="text-danger"></span>
-    </div>
-
     <div class="">
         <button type="submit" class="btn btn-primary">Update</button>
     </div>
@@ -58,27 +52,34 @@
     <h3>Certificates</h3>
     <br />
     <div>
-        <div class="d-flex c-container">
-            <img class="c-img" src="/img/05a4351a-ef5b-4f61-8440-85c9e100c801_Screenshot (139).png" alt="" />
-            <div class="c-desc">
-                <h4>Campaign Title</h4>
-                <div class="donation-container">
-                    <p>Donate 10000 MMK on Jan 1, 2023</p>
-                    <p>Donate 10000 MMK on Jan 1, 2023</p>
-                    <p>Donate 10000 MMK on Jan 1, 2023</p>
-                </div>
-                <div class="c-actions">
-                    <button class="btn btn-primary c-btn">View Certificate</button>
+        @foreach (var certificate in certificates)
+        {
+            <div class="d-flex c-container">
+                <img class="c-img" src="/img/@certificate.Campaign.Images?.Split(",").FirstOrDefault()" alt="" />
+                <div class="c-desc">
+                    <h4>@certificate.Campaign.Title</h4>
+                    <div class="donation-container">
+                        @foreach (var donation in certificate.Donations)
+                        {
+                            <p>Donate @donation.DonationAmount MMK on @donation.CreatedAt <span style="color: orange; font-weight: bold">@(donation.IsVerified ? "" : "(Pending)")</span></p>
+                        }
+                    </div>
+                    <div class="c-actions">
+                        @if(certificate.TotalAmount > 0)
+                        {
+                            <button class="btn btn-primary c-btn">View Certificate</button> 
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
 <style>
     .c-section {
         margin: 0 auto;
-        max-width: 800px;
+        max-width: 900px;
     }
 
     .c-container {

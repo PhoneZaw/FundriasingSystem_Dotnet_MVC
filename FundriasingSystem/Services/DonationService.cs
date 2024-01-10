@@ -14,27 +14,40 @@ namespace FundraisingApp.Services
     {
         private readonly IRepository<Donation> _DonationRepository;
         private readonly CertificateService _certificateService;
+        private readonly PaymentMethodService _paymentMethodService;
         private readonly IMapper _mapper;
 
         public DonationService(IRepository<Donation> DonationRepository,
             CertificateService certificateService,
+            PaymentMethodService paymentMethodService,
             IMapper mapper)
         {
             _DonationRepository = DonationRepository;
             _certificateService = certificateService;
+            _paymentMethodService = paymentMethodService;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Donation>> GetAllDonationsAsync()
+        public async Task<IEnumerable<Donation>> GetAllDonationsAsync(bool AllResult = false)
         {
             var Donations = await _DonationRepository.GetAllAsync();
+
+            if (!AllResult)
+            {
+                Donations = Donations.Where(d => d.IsVerified).ToList();
+            }
 
             return _mapper.Map<IEnumerable<Donation>>(Donations);
         }
 
-        public async Task<IEnumerable<Donation>> GetAllDonationsByCampaignAsync(Guid campaignId)
+        public async Task<IEnumerable<Donation>> GetAllDonationsByCampaignAsync(Guid campaignId, bool AllResult = false)
         {
             var Donations = (await _DonationRepository.GetAllAsync()).Where(d => d.CampaignId == campaignId);
+
+            if (!AllResult)
+            {
+                Donations = Donations.Where(d => d.IsVerified).ToList();
+            }
 
             return _mapper.Map<IEnumerable<Donation>>(Donations);
         }
@@ -49,6 +62,13 @@ namespace FundraisingApp.Services
         public async Task<Donation> CreateDonationAsync(Donation newDonation)
         {
             var existingDonation = (await _DonationRepository.GetAllAsync()).Where(d => d.DonorId == newDonation.DonorId && d.CampaignId == newDonation.CampaignId).FirstOrDefault();
+
+            var paymentMethod = await _paymentMethodService.GetByIdAsync(newDonation.PaymentMethodId);
+
+            if (!paymentMethod.IsVerificationRequired)
+            {
+                newDonation.IsVerified = true;
+            }
 
             if(existingDonation is null)
             {

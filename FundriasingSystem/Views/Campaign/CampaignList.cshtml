@@ -11,12 +11,12 @@
         {
             @foreach (var campaign in Model)
             {
-                <a href="/campaigns/@campaign.Id" class="card mb-2 mx-auto" style="max-width: 640px;">
+                <a href="/campaigns/@campaign.Id" class="card mb-2 mx-auto" style="max-width: 800px;">
                     <div class="row g-0">
-                        <div class="col-md px-0">
+                        <div class="col-4 px-0">
                             <img src="@campaign.Images" class="cardImg">
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-8">
                             <div class="card-body">
                                 <span class="badge badge-pill badge-primary">
                                     @campaign.CampaignType.CampaignTypeName
