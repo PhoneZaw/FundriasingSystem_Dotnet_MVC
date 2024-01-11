@@ -51,10 +51,23 @@
                         </a>
                     </li>
                     <li class="nav-item px-3">
+                        <a class="nav-link" href="/admin/expenseTypes">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ExpenseTypes
+                        </a>
+                    </li>
+                    <li class="nav-item px-3">
                         <a class="nav-link" href="/admin/expenses">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Expenses
                         </a>
                     </li>
+                    @if (User.Identity is not null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item px-3">
+                            <a class="nav-link" asp-controller="Account" asp-action="AdminLogout">
+                                <span class="oi oi-list-rich" aria-hidden="true"></span> Logout (@User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value)
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

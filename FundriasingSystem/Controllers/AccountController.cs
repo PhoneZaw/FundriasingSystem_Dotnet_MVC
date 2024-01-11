@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using FundriasingSystem.Models.Account;
 using System.Collections;
+using FundraisingApp.Enums;
 
 namespace FundriasingSystem.Controllers
 {
@@ -62,6 +63,12 @@ namespace FundriasingSystem.Controllers
                     return View(model);
                 }
 
+                if (staff.Status == StatusEnum.Inactive.ToString())
+                {
+                    ModelState.AddModelError(nameof(model.Email), "Your account is deactivated");
+                    return View(model);
+                }
+
                 var role = await _staffRoleRepository.GetByIdAsync(staff.RoleId);
 
                 var claims = new List<Claim>
@@ -89,7 +96,7 @@ namespace FundriasingSystem.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                return Redirect("/");
+                return Redirect("/admin/staff");
             }
 
             return View(model);
@@ -131,6 +138,12 @@ namespace FundriasingSystem.Controllers
                 if (donor.HashPassword != hashPassword)
                 {
                     ModelState.AddModelError(nameof(model.Password), "Password is incorrect");
+                    return View(model);
+                }
+
+                if (donor.Status == StatusEnum.Inactive.ToString())
+                {
+                    ModelState.AddModelError(nameof(model.Email), "Your account is deactivated");
                     return View(model);
                 }
 

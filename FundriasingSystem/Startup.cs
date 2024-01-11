@@ -47,14 +47,14 @@ namespace FundriasingSystem
                     //options.AccessDeniedPath = "/Forbidden";
                 });
 
-            services.AddAuthentication("Admin")
-                .AddCookie("Admin", options =>
-                {
-                    //options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-                    //options.SlidingExpiration = true;
-                    //options.AccessDeniedPath = "/Forbidden";
-                    options.LoginPath = "/Admin/Login";
-                });
+            //services.AddAuthentication("Admin")
+            //    .AddCookie("Admin", options =>
+            //    {
+            //        //options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+            //        //options.SlidingExpiration = true;
+            //        //options.AccessDeniedPath = "/Forbidden";
+            //        options.LoginPath = "/Admin/Login";
+            //    });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 

@@ -4,12 +4,16 @@ using FundraisingApp.Services;
 using FundriasingSystem.Entities;
 using FundriasingSystem.Models.Certificate;
 using FundriasingSystem.Models.DonorModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FundriasingSystem.Controllers
@@ -60,7 +64,33 @@ namespace FundriasingSystem.Controllers
             {
                 var entity = _mapper.Map<Donor>(model);
 
-                await _DonorService.CreateDonorAsync(entity, model.Password);
+                var donor = await _DonorService.CreateDonorAsync(entity, model.Password);
+
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, donor.Email),
+                    new Claim("UserId", donor.Id.ToString()),
+                    new Claim("FullName", $"{donor.FirstName} {donor.LastName}"),
+                    new Claim(ClaimTypes.Role, "donor"),
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(10),
+
+                    IsPersistent = true,
+
+                    IssuedUtc = DateTime.Now,
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
 
                 return Redirect("/");
             }
@@ -87,15 +117,13 @@ namespace FundriasingSystem.Controllers
 
             var donations = (await _donationService.GetAllDonationsAsync(true)).ToList();
 
-            var totalAmount = donations.Where(d => d.IsVerified).Sum(d => d.DonationAmount);
-
             var certificates = (await _certificateService.GetAllCertificatesAsync()).Where(c => c.DonorId == Donor.Id).Select(c => new CertificateViewModel
             {
                 Id = c.Id,
                 CampaignId = c.CampaignId,
                 Campaign = campaigns.FirstOrDefault(camp => camp.Id == c.CampaignId),
                 Donations = donations?.Where(d => d.CertificateId == c.Id).ToList(),
-                TotalAmount = totalAmount,
+                TotalAmount = donations.Where(d => d.CertificateId == c.Id && d.IsVerified).Sum(d => d.DonationAmount),
                 CreatedAt = c.CreatedAt,
             }).ToList();
 

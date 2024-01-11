@@ -7,8 +7,8 @@
 <form asp-action="ValidateCertificate" asp-controller="Certificate" method="post">
 
     <div class="mb-3">
-        <label asp-for="Id" class="form-label">Enter Certificate Id</label>
-        <input type="text" class="form-control" asp-for="Id" />
+        <label asp-for="Id" class="form-label">Certificate Id</label>
+        <input type="text" class="form-control" asp-for="Id" placeholder="Enter Certificate Id" />
         <span asp-validation-for="Id" class="text-danger"></span>
     </div>
 

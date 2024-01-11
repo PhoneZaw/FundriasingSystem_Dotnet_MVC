@@ -26,13 +26,18 @@
         @foreach(var paymentMethod in Model.PaymentMethods)
         {
             <div class="form-check">
-                <input class="form-check-input payment-method" type="radio" asp-for="PaymentMethodId" value="@paymentMethod.Id" id="@paymentMethod.Id" name="PaymentMethodId" data-verification-required="@paymentMethod.IsVerificationRequired" />
+                <input class="form-check-input payment-method" type="radio" asp-for="PaymentMethodId" value="@paymentMethod.Id" id="@paymentMethod.Id" name="PaymentMethodId" data-verification-required="@paymentMethod.IsVerificationRequired" data-payment-info="@paymentMethod.Description" />
                 <label class="form-check-label" for="@paymentMethod.Id">
                     @paymentMethod.PaymentMethodName
                 </label>
             </div>
         }
         <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+    </div>
+    <div>
+
+        <p>Payment Info - <span class="payment-info"></span></p>
+
     </div>
 
     <div class="mb-3" id="cardNumberField">
@@ -58,15 +63,24 @@
     </div>
 </form>
 
+<style>
+</style>
+
 @section Scripts {
     <script>
         $(document).ready(function () {
             $("#cardNumberField").hide();
             $("#voucherFileField").hide();
 
+            //$(".payment-method:first").prop("checked", true).change();
+
+            //$(".payment-method:first").change();
+
             $(".payment-method").change(function () {
                 var isVerificationRequired = $(this).data("verification-required");
-                console.log(isVerificationRequired)
+
+                $(".payment-info").text($(this).data("payment-info"));
+
                 if (isVerificationRequired === "True") {
                     $("#cardNumberField input").prop("required", false);
                     $("#cardNumberField").hide();

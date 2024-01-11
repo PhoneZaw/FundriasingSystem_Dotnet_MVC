@@ -77,19 +77,19 @@
             <h3>Share on Social Media</h3>
             <div class="component-container">
                 <div class="">
-                    <a class="share-component" href="https://www.facebook.com/sharer/sharer.php?u=@shareUrl" target="_blank">
+                    <a class="share-component" href="https://www.facebook.com/sharer/sharer.php?u=@shareUrl" target="_blank" style="background-color: #1877F2">
                         <img class="share-icon" src="/icons/Facebook.png" />
                         <p>Share on Facebook</p>
                     </a>
                 </div>
                 <div class="">
-                    <a class="share-component" href="https://twitter.com/intent/tweet?text=@donateUrl" target="_blank">
+                    <a class="share-component" href="https://twitter.com/intent/tweet?text=@donateUrl" target="_blank" style="background-color: #1877F2">
                         <img class="share-icon" src="/icons/Twitter.png" />
                         <p>Share on Twitter</p>
                     </a>
                 </div>
                 <div class="">
-                    <button class="share-component" onclick="copyLink()">
+                    <button class="share-component" onclick="copyLink()" style="background-color: gray">
                         <img class="share-icon" src="/icons/Link.png" />
                         <p>Copy Campaign URL</p>
                     </button>
@@ -107,7 +107,7 @@
                 <form asp-action="CreateSuggestion" asp-controller="Suggestion" class="sug-input row ml-3">
                     <input type="text" value="@User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value" name="DonorId" hidden />
                     <input type="text" value="@Model.Id" name="CampaignId" hidden />
-                    <input class="col col-8 form-control mr-3" type="text" value="" name="Message" placeholder="Suggestions" />
+                    <input class="col col-8 form-control mr-3" type="text" value="" name="Message" placeholder="Suggestions" required />
                     <input class="col col-3 btn btn-primary" type="submit" value="Submit" />
                 </form>
             }
@@ -136,7 +136,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <br />
                 }
             </div>
         </div>
