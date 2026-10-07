@@ -155,11 +155,13 @@ function openSlip(row) {
   $("#slip-state").textContent = pending ? "Waiting for a match" : "Already counted";
   $("#drawer").hidden = false;
   $("#backdrop").hidden = false;
+  document.body.classList.add("reviewing");
 }
 
 function closeDrawer() {
   $("#drawer").hidden = true;
   $("#backdrop").hidden = true;
+  document.body.classList.remove("reviewing");
 }
 
 function closeModal() {

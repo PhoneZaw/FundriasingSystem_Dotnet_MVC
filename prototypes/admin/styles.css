@@ -461,7 +461,20 @@ body.desk {
 .swatch.blankets { background: linear-gradient(145deg, #5c4a38, #d7c4a8); }
 
 .pace strong, .queue-item strong, .person strong { font-size: 14px; }
-.meta { color: var(--muted); font-size: 12px; }
+.meta { color: var(--muted); font-size: 12px; display: block; }
+.pace > span:nth-child(2),
+.queue-item > span:first-child,
+.person > span:nth-child(2),
+.me > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+body.reviewing .main { margin-right: 420px; }
+body.reviewing td:last-child,
+body.reviewing th:last-child { display: none; }
 
 .meter {
   height: 6px;
@@ -666,7 +679,7 @@ tr[data-open]:hover td { background: #faf6ee; cursor: pointer; }
   top: 0;
   right: 0;
   height: 100vh;
-  width: min(440px, 100%);
+  width: min(420px, 100%);
   background: #f7f2e9;
   z-index: 21;
   border-left: 1px solid var(--line);
