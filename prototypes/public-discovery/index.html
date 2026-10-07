@@ -1,0 +1,655 @@
+<!-- PROTOTYPE, throwaway. Field Notes donor flow. Not wired to the app. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BetterTogether — Field Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@420;520;600&family=Newsreader:opsz,wght@6..72,450;6..72,560&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: #f3efe6; color: #1c1915; font-family: "Instrument Sans", sans-serif; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    :focus-visible { outline: 2px solid #0f6e56; outline-offset: 3px; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+    .rise { animation: rise 260ms ease-out both; }
+    @media (prefers-reduced-motion: reduce) {
+      .rise { animation: none; }
+    }
+
+    header.bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 18px;
+      padding: 22px 40px;
+    }
+    .brand { font-family: "Newsreader", serif; font-size: 22px; letter-spacing: -0.03em; }
+    header.bar nav { display: flex; gap: 22px; font-size: 14px; align-items: baseline; }
+    header.bar button, .texty {
+      background: none; border: 0; padding: 0; color: #1c1915;
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+
+    .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; min-height: 78vh; }
+    .hero-copy { padding: 28px 40px 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .kicker { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #5c564c; }
+    h1 {
+      font-family: "Newsreader", serif; font-weight: 450;
+      font-size: 64px; line-height: 0.96; letter-spacing: -0.03em; margin: 14px 0 18px;
+    }
+    .lede { font-size: 18px; max-width: 40ch; line-height: 1.45; color: #3a342c; }
+    .meter { margin-top: 28px; max-width: 440px; }
+    .meter-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; margin-bottom: 8px; }
+    .track { height: 2px; background: #d9d2c5; }
+    .fill { height: 2px; background: #0f6e56; transform-origin: left center; }
+    .hero-actions, .row-actions { display: flex; gap: 18px; align-items: center; margin-top: 22px; flex-wrap: wrap; }
+    .give, .confirm {
+      background: #1c1915; color: #f3efe6; border: 0; border-radius: 999px; padding: 12px 18px;
+    }
+    .confirm { background: #0f6e56; }
+    .hero-photo { min-height: 420px; background: #cfc6b8 center/cover no-repeat; }
+
+    .index { padding: 8px 40px 72px; }
+    .index h2, .sheet h2 {
+      font-family: "Newsreader", serif; font-weight: 450; font-size: 32px; margin: 0 0 8px; letter-spacing: -0.03em;
+    }
+    .tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 8px; }
+    input[data-search], .field input, .field textarea, .field select {
+      background: transparent; border: 0; border-bottom: 1px solid #1c1915; border-radius: 0; padding: 8px 0;
+    }
+    input[data-search] { width: min(420px, 100%); }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filters button {
+      border: 1px solid #1c1915; background: transparent; border-radius: 999px; padding: 7px 12px;
+    }
+    .filters button[data-on] { background: #1c1915; color: #f3efe6; }
+    .count { font-size: 13px; color: #5c564c; margin: 8px 0 0; }
+    .row {
+      display: grid; grid-template-columns: 56px 1fr auto; gap: 18px; align-items: baseline;
+      padding: 18px 0; border-top: 1px solid #ddd4c6; width: 100%; text-align: left; color: inherit;
+    }
+    .row b { font-weight: 520; }
+    .row small, .note { color: #5c564c; }
+    .note { font-size: 14px; line-height: 1.45; }
+
+    .sheet { padding: 8px 40px 72px; display: grid; grid-template-columns: 1.1fr 0.75fr; gap: 40px; }
+    .sheet h1 { font-size: 52px; }
+    .story { font-size: 18px; line-height: 1.5; max-width: 46ch; }
+    .side { padding-top: 36px; }
+    .amounts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .amounts button, .ghost {
+      border: 1px solid #1c1915; background: transparent; border-radius: 999px; padding: 8px 14px;
+    }
+    .amounts button[data-on] { background: #1c1915; color: #f3efe6; }
+    .gift-list { list-style: none; padding: 0; margin: 12px 0 0; }
+    .gift-list li { padding: 8px 0; border-top: 1px solid #ddd4c6; font-size: 14px; }
+
+    .form { max-width: 560px; display: grid; gap: 16px; }
+    .field { display: grid; gap: 6px; }
+    .field input, .field textarea { width: 100%; }
+    .pay { display: grid; gap: 8px; }
+    .pay label {
+      display: grid; grid-template-columns: 18px 1fr; gap: 10px; align-items: start;
+      padding: 10px 0; border-top: 1px solid #ddd4c6;
+    }
+    .pay small { display: block; color: #5c564c; }
+    .error { color: #8f2d2d; font-size: 14px; }
+    .cert {
+      max-width: 640px; border: 1px solid #1c1915; padding: 28px; background: #f7f4ec;
+    }
+    .cert strong { font-family: "Newsreader", serif; font-size: 28px; font-weight: 450; letter-spacing: -0.03em; }
+    .status-wait { color: #8a5a12; }
+    .status-ok { color: #0f6e56; }
+
+    @media (max-width: 800px) {
+      .hero, .sheet { grid-template-columns: 1fr; }
+      h1 { font-size: 40px; }
+      .sheet h1 { font-size: 36px; }
+      header.bar, .hero-copy, .index, .sheet { padding-left: 20px; padding-right: 20px; }
+      .side { padding-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const TYPES = ["All", "Emergency", "Education", "Health", "Community"];
+    const PAYMENTS = [
+      { id: "kbz", name: "KBZPay", verify: true, info: "Send the amount to 09 420 118 774, account name BetterTogether. Upload the transfer slip." },
+      { id: "wave", name: "Wave Money", verify: true, info: "Send the amount to 09 778 220 441. Upload the transfer slip." },
+      { id: "bank", name: "Bank transfer", verify: true, info: "AYA Bank 2001 2345 678, BetterTogether. Upload the transfer slip." },
+      { id: "card", name: "Visa or Mastercard", verify: false, info: "The gift is confirmed now and a certificate is issued on this page." }
+    ];
+
+    const campaigns = [
+      { id: "flood", type: "Emergency", title: "Supper for the Ayeyarwady floods", lede: "Twelve kitchens are still serving rice after the water came through Bogale.", place: "Bogale", host: "Ma Thida", hostRole: "Kitchen lead", raised: 48200000, goal: 80000000, days: 18, donors: 1264, img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80", story: "The river rose on a Tuesday. By Thursday the schoolyard was a kitchen. Ma Thida’s crew cooks two meals a day for families who are sleeping in the monastery hall. Rice, dried fish, and the oil to fry it are what runs out first." },
+      { id: "library", type: "Education", title: "A library that stays open after school", lede: "Hpa-An students are borrowing books from a cupboard. They need a room.", place: "Hpa-An", host: "Ko Min Thu", hostRole: "Teacher", raised: 12400000, goal: 20000000, days: 41, donors: 386, img: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1600&q=80", story: "The English shelf is fourteen paperbacks and a dictionary with a broken spine. Ko Min Thu wants shelves, a fan, and a librarian’s hour after the last bell so the room is not just storage." },
+      { id: "clinic", type: "Health", title: "Night clinic across the river", lede: "Dala’s ferry stops at dusk. The clinic should not.", place: "Dala", host: "Dr. Ei Phyu", hostRole: "Physician", raised: 31750000, goal: 45000000, days: 9, donors: 902, img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=80", story: "After 7 the only light in the lane is a phone torch. The night shift needs a generator, two nurses, and a cabinet that actually locks. Nine days left on the lease for the room." },
+      { id: "strays", type: "Community", title: "A yard for the Bagan strays", lede: "The temple dogs have a feeding route. They do not have shade.", place: "Bagan", host: "Su Su", hostRole: "Neighbor", raised: 6800000, goal: 15000000, days: 27, donors: 214, img: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1600&q=80", story: "Su Su already knows which dogs will take medicine and which ones only want rice. The yard is a fenced corner behind her aunt’s house: water, shade cloth, and a vet visit once a month." },
+      { id: "girls", type: "Education", title: "Forty scholarships in Mandalay", lede: "The bus fare is why the second term goes empty.", place: "Mandalay", host: "Daw Hla", hostRole: "School committee", raised: 22100000, goal: 60000000, days: 54, donors: 540, img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=80", story: "Forty girls have a place. What they do not have is the fare, the uniform, and a year of fees paid before the family has to choose. Daw Hla publishes every name that is funded." },
+      { id: "water", type: "Community", title: "Piped water for twelve Chin villages", lede: "The walk for water is still two hours, and it is uphill home.", place: "Chin State", host: "Pa Lian", hostRole: "Village council", raised: 71000000, goal: 90000000, days: 12, donors: 2108, img: "https://images.unsplash.com/photo-1541544537156-7627a7a4aa1c?auto=format&fit=crop&w=1600&q=80", story: "The spring is clean. The path is not the problem people think it is — the problem is the afternoon, when the children carry the second load. Pipe and a storage tank finish what the path cannot." }
+    ];
+
+    const donors = [
+      { id: "ada", first: "Ada", last: "Lovelace", email: "ada@example.com", password: "Fundraise-Dev-1", phone: "09123456789", address: "Bahan, Yangon" }
+    ];
+
+    const gifts = [
+      { id: "g1", donorId: "ada", campaignId: "flood", amount: 50000, pay: "card", verified: true, code: "BT-2041", at: "2 Oct 2026", remark: "For the evening rice." }
+    ];
+
+    const ui = {
+      q: "",
+      cat: "All",
+      session: null,
+      next: "#/",
+      amount: 50000,
+      custom: "",
+      pay: "kbz",
+      remark: "",
+      card: "",
+      voucher: "",
+      error: "",
+      loginEmail: "",
+      copied: false
+    };
+
+    const app = document.getElementById("app");
+
+    function mmk(n) { return Number(n).toLocaleString("en-US") + " MMK"; }
+    function pct(c) { return Math.min(100, Math.round((c.raised / c.goal) * 100)); }
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+    function campaign(id) { return campaigns.find((c) => c.id === id); }
+    function donor(id) { return donors.find((d) => d.id === id); }
+    function payment(id) { return PAYMENTS.find((p) => p.id === id); }
+    function fullName(d) { return d ? (d.first + " " + d.last).trim() : "Donor"; }
+    function route() {
+      const parts = (location.hash || "#/").replace(/^#/, "").split("/").filter(Boolean);
+      return { parts, path: "/" + parts.join("/") };
+    }
+    function go(path) {
+      ui.error = "";
+      const next = path.startsWith("#") ? path : "#" + path;
+      if (!/\/(login|register|donate)/.test(next)) ui.next = "#/";
+      if (location.hash === next) render();
+      else location.hash = next;
+    }
+    function hay(c) {
+      return (c.title + " " + c.place + " " + c.type + " " + c.host + " " + c.lede).toLowerCase();
+    }
+    function lead() { return campaigns[0]; }
+    function visibleCampaigns() {
+      const term = ui.q.trim().toLowerCase();
+      const filtering = term || ui.cat !== "All";
+      const pool = filtering ? campaigns : campaigns.filter((c) => c.id !== lead().id);
+      return pool.filter((c) => {
+        const okTerm = !term || hay(c).includes(term);
+        const okCat = ui.cat === "All" || c.type === ui.cat;
+        return okTerm && okCat;
+      });
+    }
+
+    function header() {
+      const who = ui.session ? fullName(ui.session) : "Log in";
+      return `<header class="bar">
+        <button class="brand" type="button" data-go="#/">BetterTogether</button>
+        <nav>
+          <button type="button" data-go="#/">Campaigns</button>
+          <button type="button" data-go="#/certificates/validate">Certificates</button>
+          <button type="button" data-go="${ui.session ? "#/profile" : "#/login"}">${esc(who)}</button>
+        </nav>
+      </header>`;
+    }
+
+    function home() {
+      const feature = lead();
+      const chips = TYPES.map((cat) => {
+        const n = cat === "All" ? campaigns.length : campaigns.filter((c) => c.type === cat).length;
+        return `<button type="button" data-cat="${cat}" ${cat === ui.cat ? "data-on" : ""}>${cat} ${n}</button>`;
+      }).join("");
+      const listed = listMarkup();
+      return `${header()}
+        <section class="hero">
+          <div class="hero-copy rise">
+            <div class="kicker">${esc(feature.place)} · ${esc(feature.type)} · Lead story</div>
+            <h1>${esc(feature.title)}</h1>
+            <p class="lede">${esc(feature.lede)} ${esc(feature.host)}, ${esc(feature.hostRole)}, is still cooking.</p>
+            <div class="meter">
+              <div class="meter-row"><span>${mmk(feature.raised)} given</span><span>of ${mmk(feature.goal)}</span></div>
+              <div class="track"><div class="fill" style="width:${pct(feature)}%"></div></div>
+            </div>
+            <div class="hero-actions">
+              <button class="give" type="button" data-go="#/campaigns/${feature.id}">Read this story</button>
+              <button class="texty" type="button" data-jump>Other campaigns</button>
+            </div>
+          </div>
+          <div class="hero-photo rise" style="background-image:url('${feature.img}')" role="img" aria-label="${esc(feature.title)}"></div>
+        </section>
+        <section class="index" id="index">
+          <h2 class="rise">Other campaigns</h2>
+          <p class="note">The lead story stays at the top. Search and filters open the rest.</p>
+          <div class="tools">
+            <input data-search value="${esc(ui.q)}" placeholder="Place, host, or cause" aria-label="Search campaigns" />
+            <div class="filters" role="group" aria-label="Filter by cause">${chips}</div>
+          </div>
+          <p class="count" data-count>${listed.count}</p>
+          <div data-list>${listed.html}</div>
+        </section>`;
+    }
+
+    function detail(id) {
+      const c = campaign(id);
+      if (!c) return missing();
+      const recent = gifts.filter((g) => g.campaignId === id && g.verified).slice(-4).reverse();
+      const people = recent.map((g) => {
+        const d = donor(g.donorId);
+        return `<li>${esc(fullName(d))} gave ${mmk(g.amount)}</li>`;
+      }).join("") || "<li>Be the first name on this story.</li>";
+      return `${header()}
+        <article class="sheet rise">
+          <div>
+            <button class="texty" type="button" data-go="#/">All stories</button>
+            <div class="kicker" style="margin-top:18px">${esc(c.place)} · ${esc(c.host)}, ${esc(c.hostRole)}</div>
+            <h1>${esc(c.title)}</h1>
+            <p class="story">${esc(c.story)}</p>
+            <p class="note">${c.days} days left · ${c.donors.toLocaleString("en-US")} people have given</p>
+            <div class="hero-actions">
+              <button class="give" type="button" data-go="#/donate/${c.id}">Give to this story</button>
+              <button class="texty" type="button" data-copy>Copy link</button>
+              <span class="note" data-copied ${ui.copied ? "" : "hidden"}>Link copied.</span>
+            </div>
+          </div>
+          <div class="side">
+            <div class="hero-photo" style="height:240px;background-image:url('${c.img}')" role="img" aria-label=""></div>
+            <div class="meter">
+              <div class="meter-row"><span>${mmk(c.raised)} given</span><span>${pct(c)}% of ${mmk(c.goal)}</span></div>
+              <div class="track"><div class="fill" style="width:${pct(c)}%"></div></div>
+            </div>
+            <p class="kicker" style="margin-top:22px">Recent gifts</p>
+            <ul class="gift-list">${people}</ul>
+          </div>
+        </article>`;
+    }
+
+    function donate(id) {
+      const c = campaign(id);
+      if (!c) return missing();
+      if (!ui.session) {
+        ui.next = "#/donate/" + id;
+        return login();
+      }
+      const chosen = ui.custom ? Number(ui.custom) : ui.amount;
+      const amounts = [25000, 50000, 100000].map((n) =>
+        `<button type="button" data-amt="${n}" ${!ui.custom && n === ui.amount ? "data-on" : ""}>${mmk(n)}</button>`).join("");
+      const pays = PAYMENTS.map((p) => `
+        <label>
+          <input type="radio" name="pay" value="${p.id}" ${p.id === ui.pay ? "checked" : ""} />
+          <span><b>${esc(p.name)}</b><small>${esc(p.info)}</small></span>
+        </label>`).join("");
+      const method = payment(ui.pay);
+      const extra = method.verify
+        ? `<label class="field">Payment voucher<input type="file" data-voucher />${ui.voucher ? `<small>Attached ${esc(ui.voucher)}</small>` : ""}</label>`
+        : `<label class="field">Card number<input data-card inputmode="numeric" placeholder="16 digits" value="${esc(ui.card)}" /></label>`;
+      return `${header()}
+        <article class="sheet rise">
+          <div>
+            <button class="texty" type="button" data-go="#/campaigns/${c.id}">Back to the story</button>
+            <div class="kicker" style="margin-top:18px">Gift · ${esc(fullName(ui.session))}</div>
+            <h1>${esc(c.title)}</h1>
+            <form class="form" data-donate>
+              <div class="field">
+                <span>Amount</span>
+                <div class="amounts">${amounts}</div>
+                <input data-custom inputmode="numeric" placeholder="Or another amount, at least 1,000" value="${esc(ui.custom)}" />
+              </div>
+              <div class="field">
+                <span>How you will pay</span>
+                <div class="pay">${pays}</div>
+              </div>
+              ${extra}
+              <label class="field">Note for ${esc(c.host)}<textarea data-remark rows="3">${esc(ui.remark)}</textarea></label>
+              ${ui.error ? `<p class="error">${esc(ui.error)}</p>` : ""}
+              <button class="confirm" type="submit">Give ${mmk(chosen || 0)}</button>
+            </form>
+          </div>
+          <div class="side">
+            <div class="meter">
+              <div class="meter-row"><span>${mmk(c.raised)} given</span><span>of ${mmk(c.goal)}</span></div>
+              <div class="track"><div class="fill" style="width:${pct(c)}%"></div></div>
+            </div>
+            <p class="note" style="margin-top:16px">${method.verify ? "A staff member checks the slip before the total moves and the certificate opens." : "A card gift is counted now. The certificate opens on the next page."}</p>
+          </div>
+        </article>`;
+    }
+
+    function thanks() {
+      const gift = gifts[gifts.length - 1];
+      if (!gift || !ui.session || gift.donorId !== ui.session.id) return `${header()}<section class="index"><h2>No gift yet</h2><button class="texty" data-go="#/">Back to stories</button></section>`;
+      const c = campaign(gift.campaignId);
+      const body = gift.verified
+        ? `<p class="lede">Thank you. ${mmk(gift.amount)} is now on ${esc(c.title)}.</p>
+           <div class="hero-actions"><button class="confirm" type="button" data-go="#/certificates/${gift.code}">Open certificate ${esc(gift.code)}</button></div>`
+        : `<p class="lede">Thank you. Please wait for a staff member to verify the ${esc(payment(gift.pay).name)} slip. The campaign total will move after that.</p>
+           <p class="note">Your note is saved on your profile as waiting.</p>`;
+      return `${header()}
+        <section class="index rise">
+          <div class="kicker">Gift received</div>
+          <h2 style="font-size:48px">Thank you, ${esc(ui.session.first)}.</h2>
+          ${body}
+          <div class="hero-actions">
+            <button class="texty" type="button" data-go="#/campaigns/${c.id}">Back to the story</button>
+            <button class="texty" type="button" data-go="#/profile">Your gifts</button>
+          </div>
+        </section>`;
+    }
+
+    function certificate(code) {
+      const gift = gifts.find((g) => g.code === code);
+      if (!gift || !gift.verified) {
+        return `${header()}<section class="index rise"><h2>No certificate for ${esc(code)}</h2><p class="note">Verified gifts carry a certificate. Pending slips do not, until staff confirm them.</p><button class="texty" data-go="#/certificates/validate">Check another code</button></section>`;
+      }
+      const c = campaign(gift.campaignId);
+      const d = donor(gift.donorId);
+      return `${header()}
+        <section class="index rise">
+          <button class="texty" type="button" data-go="#/certificates/validate">Check another code</button>
+          <div class="cert" style="margin-top:18px">
+            <div class="kicker">BetterTogether gift certificate</div>
+            <p><strong>${esc(gift.code)}</strong></p>
+            <p>${esc(fullName(d))} gave ${mmk(gift.amount)} to ${esc(c.title)} on ${esc(gift.at)}.</p>
+            <p class="note">${esc(c.place)} · ${esc(c.host)} · ${esc(payment(gift.pay).name)}</p>
+            <p class="status-ok">Valid</p>
+          </div>
+        </section>`;
+    }
+
+    function validate() {
+      return `${header()}
+        <section class="index rise">
+          <h2>Check a gift certificate</h2>
+          <p class="lede">Enter the code printed on the certificate. Try BT-2041.</p>
+          <form class="form" data-cert>
+            <label class="field">Certificate code<input name="code" required placeholder="BT-2041" /></label>
+            ${ui.error ? `<p class="error">${esc(ui.error)}</p>` : ""}
+            <button class="confirm" type="submit" style="justify-self:start">Check</button>
+          </form>
+        </section>`;
+    }
+
+    function login() {
+      return `${header()}
+        <section class="index rise">
+          <h2>Log in</h2>
+          <p class="lede">A gift is tied to a donor account. Ada’s demo account is ada@example.com, password Fundraise-Dev-1.</p>
+          <form class="form" data-login>
+            <label class="field">Email<input name="email" type="email" required value="${esc(ui.loginEmail)}" /></label>
+            <label class="field">Password<input name="password" type="password" required /></label>
+            ${ui.error ? `<p class="error">${esc(ui.error)}</p>` : ""}
+            <button class="confirm" type="submit" style="justify-self:start">Continue</button>
+          </form>
+          <p class="note">No account yet? <button class="texty" type="button" data-go="#/register">Register</button></p>
+        </section>`;
+    }
+
+    function register() {
+      return `${header()}
+        <section class="index rise">
+          <h2>Register</h2>
+          <p class="lede">This opens a donor account in this mockup only. Nothing is sent to the server.</p>
+          <form class="form" data-register>
+            <label class="field">First name<input name="first" required /></label>
+            <label class="field">Last name<input name="last" /></label>
+            <label class="field">Email<input name="email" type="email" required /></label>
+            <label class="field">Address<input name="address" required /></label>
+            <label class="field">Phone<input name="phone" required /></label>
+            <label class="field">Password<input name="password" type="password" required minlength="8" /></label>
+            ${ui.error ? `<p class="error">${esc(ui.error)}</p>` : ""}
+            <button class="confirm" type="submit" style="justify-self:start">Create account</button>
+          </form>
+          <p class="note">Already registered? <button class="texty" type="button" data-go="#/login">Log in</button></p>
+        </section>`;
+    }
+
+    function profile() {
+      if (!ui.session) return login();
+      const mine = gifts.filter((g) => g.donorId === ui.session.id).slice().reverse();
+      const rows = mine.map((g) => {
+        const c = campaign(g.campaignId);
+        const state = g.verified
+          ? `<a href="#/certificates/${g.code}">${esc(g.code)}</a>`
+          : `<span class="status-wait">Waiting for verification</span>`;
+        return `<li>${mmk(g.amount)} to ${esc(c.title)} · ${esc(payment(g.pay).name)} · ${state}</li>`;
+      }).join("") || "<li>No gifts yet.</li>";
+      return `${header()}
+        <section class="index rise">
+          <div class="kicker">${esc(ui.session.email)}</div>
+          <h2>${esc(fullName(ui.session))}</h2>
+          <p class="note">${esc(ui.session.address)} · ${esc(ui.session.phone)}</p>
+          <ul class="gift-list">${rows}</ul>
+          <div class="hero-actions"><button class="texty" type="button" data-logout>Log out</button></div>
+        </section>`;
+    }
+
+    function missing() {
+      return `${header()}<section class="index"><h2>That page is not in this mockup.</h2><button class="texty" data-go="#/">Back to stories</button></section>`;
+    }
+
+    function view() {
+      const { parts } = route();
+      if (!parts.length) return home();
+      if (parts[0] === "campaigns" && parts[1]) return detail(parts[1]);
+      if (parts[0] === "donate" && parts[1]) return donate(parts[1]);
+      if (parts[0] === "thanks") return thanks();
+      if (parts[0] === "certificates" && parts[1] === "validate") return validate();
+      if (parts[0] === "certificates" && parts[1]) return certificate(parts[1]);
+      if (parts[0] === "login") return login();
+      if (parts[0] === "register") return register();
+      if (parts[0] === "profile") return profile();
+      return missing();
+    }
+
+    function chosenAmount() {
+      const n = ui.custom ? Number(String(ui.custom).replace(/,/g, "")) : Number(ui.amount);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function issue(campaignId) {
+      const method = payment(ui.pay);
+      const amount = chosenAmount();
+      const code = method.verify ? "" : "BT-" + String(2000 + gifts.length);
+      const gift = {
+        id: "g" + (gifts.length + 1),
+        donorId: ui.session.id,
+        campaignId,
+        amount,
+        pay: ui.pay,
+        verified: !method.verify,
+        code,
+        at: "7 Oct 2026",
+        remark: ui.remark
+      };
+      gifts.push(gift);
+      if (gift.verified) {
+        const c = campaign(campaignId);
+        c.raised += amount;
+        c.donors += 1;
+      }
+      ui.remark = "";
+      ui.card = "";
+      ui.voucher = "";
+      ui.custom = "";
+      ui.pay = "kbz";
+      ui.error = "";
+      go("#/thanks");
+    }
+
+    function listMarkup() {
+      const feature = lead();
+      const rows = visibleCampaigns();
+      const filtering = ui.q.trim() || ui.cat !== "All";
+      const list = rows.map((c, i) => `
+        <a class="row" href="#/campaigns/${c.id}">
+          <small>${String(i + 1).padStart(2, "0")}</small>
+          <span><b>${esc(c.title)}</b>${c.id === feature.id ? " · Lead story" : ""}<br><small>${esc(c.place)} · ${esc(c.type)} · ${c.days} days left</small></span>
+          <small>${pct(c)}%</small>
+        </a>`).join("");
+      const empty = rows.length ? "" : `<p class="note">Nothing matches. The lead story above is still taking gifts.</p>`;
+      return {
+        count: filtering ? rows.length + " matching" : rows.length + " besides the lead story",
+        html: empty + list
+      };
+    }
+
+    function paintIndex() {
+      const box = listMarkup();
+      const count = app.querySelector("[data-count]");
+      const list = app.querySelector("[data-list]");
+      if (count) count.textContent = box.count;
+      if (list) list.innerHTML = box.html;
+      app.querySelectorAll("[data-cat]").forEach((btn) => {
+        btn.toggleAttribute("data-on", btn.dataset.cat === ui.cat);
+      });
+    }
+
+    function render() {
+      ui.copied = false;
+      app.innerHTML = `<div class="page">${view()}</div>`;
+      window.scrollTo(0, 0);
+      bind();
+    }
+
+    function bind() {
+      app.querySelectorAll("[data-go]").forEach((el) => {
+        el.addEventListener("click", () => go(el.dataset.go));
+      });
+      app.querySelector("[data-jump]")?.addEventListener("click", () => {
+        app.querySelector("#index")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      const search = app.querySelector("[data-search]");
+      if (search) {
+        search.addEventListener("input", () => {
+          ui.q = search.value;
+          paintIndex();
+        });
+      }
+      app.querySelectorAll("[data-cat]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          ui.cat = btn.dataset.cat;
+          paintIndex();
+        });
+      });
+      app.querySelector("[data-copy]")?.addEventListener("click", async () => {
+        const url = location.href;
+        try { await navigator.clipboard.writeText(url); } catch (err) { /* mockup still confirms */ }
+        const note = app.querySelector("[data-copied]");
+        if (note) note.hidden = false;
+      });
+      app.querySelectorAll("[data-amt]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          ui.amount = Number(btn.dataset.amt);
+          ui.custom = "";
+          ui.error = "";
+          render();
+        });
+      });
+      app.querySelector("[data-custom]")?.addEventListener("input", (e) => {
+        ui.custom = e.target.value;
+        const submit = app.querySelector("[data-donate] button[type=submit]");
+        if (submit) submit.textContent = "Give " + mmk(chosenAmount() || 0);
+      });
+      app.querySelectorAll("input[name=pay]").forEach((el) => {
+        el.addEventListener("change", () => {
+          ui.pay = el.value;
+          ui.error = "";
+          render();
+        });
+      });
+      app.querySelector("[data-card]")?.addEventListener("input", (e) => { ui.card = e.target.value; });
+      app.querySelector("[data-remark]")?.addEventListener("input", (e) => { ui.remark = e.target.value; });
+      app.querySelector("[data-voucher]")?.addEventListener("change", (e) => {
+        ui.voucher = e.target.files?.[0]?.name || "";
+        render();
+      });
+      app.querySelector("[data-donate]")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const amount = chosenAmount();
+        const method = payment(ui.pay);
+        if (amount < 1000) { ui.error = "The smallest gift is 1,000 MMK."; render(); return; }
+        if (method.verify && !ui.voucher) { ui.error = "Attach the transfer slip before giving."; render(); return; }
+        if (!method.verify && String(ui.card).replace(/\s/g, "").length < 16) { ui.error = "Enter the 16-digit card number."; render(); return; }
+        const id = route().parts[1];
+        issue(id);
+      });
+      app.querySelector("[data-login]")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const email = String(data.get("email") || "").trim().toLowerCase();
+        const password = String(data.get("password") || "");
+        ui.loginEmail = email;
+        const found = donors.find((d) => d.email.toLowerCase() === email && d.password === password);
+        if (!found) { ui.error = "That email and password do not match."; render(); return; }
+        ui.session = found;
+        ui.error = "";
+        const next = ui.next || "#/";
+        ui.next = "#/";
+        go(next);
+      });
+      app.querySelector("[data-register]")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const email = String(data.get("email") || "").trim().toLowerCase();
+        if (donors.some((d) => d.email.toLowerCase() === email)) { ui.error = "That email already has an account. Log in instead."; render(); return; }
+        const person = {
+          id: "d" + donors.length,
+          first: String(data.get("first") || "").trim(),
+          last: String(data.get("last") || "").trim(),
+          email,
+          password: String(data.get("password") || ""),
+          phone: String(data.get("phone") || "").trim(),
+          address: String(data.get("address") || "").trim()
+        };
+        donors.push(person);
+        ui.session = person;
+        ui.error = "";
+        const next = ui.next || "#/";
+        ui.next = "#/";
+        go(next);
+      });
+      app.querySelector("[data-cert]")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const code = String(new FormData(e.target).get("code") || "").trim();
+        const gift = gifts.find((g) => g.code === code);
+        if (!gift || !gift.verified) { ui.error = "No verified certificate matches " + code + "."; render(); return; }
+        ui.error = "";
+        go("#/certificates/" + code);
+      });
+      app.querySelector("[data-logout]")?.addEventListener("click", () => {
+        ui.session = null;
+        ui.pay = "kbz";
+        ui.card = "";
+        ui.voucher = "";
+        ui.remark = "";
+        ui.custom = "";
+        go("#/");
+      });
+    }
+
+    window.addEventListener("hashchange", render);
+    if (!location.hash) location.hash = "#/";
+    else render();
+  </script>
+</body>
+</html>
