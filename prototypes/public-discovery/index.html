@@ -491,6 +491,7 @@
       ui.card = "";
       ui.voucher = "";
       ui.custom = "";
+      ui.pay = "kbz";
       ui.error = "";
       go("#/thanks");
     }
@@ -637,6 +638,11 @@
       });
       app.querySelector("[data-logout]")?.addEventListener("click", () => {
         ui.session = null;
+        ui.pay = "kbz";
+        ui.card = "";
+        ui.voucher = "";
+        ui.remark = "";
+        ui.custom = "";
         go("#/");
       });
     }
