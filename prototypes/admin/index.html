@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Today — BetterTogether Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,640&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 24'%3E%3Ccircle cx='13' cy='12' r='9' fill='%231e4d3d'/%3E%3Ccircle cx='23' cy='12' r='9' fill='%23e07a2f'/%3E%3Ccircle cx='18' cy='12' r='4' fill='%23f3eee6'/%3E%3C/svg%3E" />
+</head>
+<body class="desk">
+  <aside class="rail">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 36 24" aria-hidden="true">
+        <circle cx="13" cy="12" r="9" fill="#1e4d3d"/>
+        <circle cx="23" cy="12" r="9" fill="#e07a2f"/>
+        <circle cx="18" cy="12" r="4" fill="#ebe4d6"/>
+      </svg>
+      <span>
+        <strong>BetterTogether</strong>
+        <em>Operations</em>
+      </span>
+    </a>
+    <nav class="nav">
+      <p class="nav-label">Desk</p>
+      <button type="button" data-go="today" class="is-on">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/></svg>
+        Today
+      </button>
+      <p class="nav-label">Fundraising</p>
+      <button type="button" data-go="campaigns">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 20V5h9l-1.5 3L14 11H5"/><path d="M5 20h14"/></svg>
+        Campaigns
+      </button>
+      <button type="button" data-go="donations">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 10h16v9H4z"/><path d="M12 10v9M4 14h16"/><path d="M8 10c0-2 1.5-4 4-4s4 2 4 4"/></svg>
+        Donations
+        <span class="count" id="pending-count">4</span>
+      </button>
+      <p class="nav-label">People</p>
+      <button type="button" data-go="donors">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="9" r="3"/><path d="M4 19c.6-2.4 2.4-4 5-4s4.4 1.6 5 4"/><circle cx="17" cy="9" r="2.2"/><path d="M16 15c2 .3 3.4 1.5 4 3.2"/></svg>
+        Donors
+      </button>
+      <button type="button" data-go="staff">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+        Staff
+      </button>
+      <p class="nav-label">Money</p>
+      <button type="button" data-go="expenses">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 19V9M12 19V5M19 19v-7"/></svg>
+        Expenses
+      </button>
+      <p class="nav-label">System</p>
+      <button type="button" data-go="setup">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8 5.6 18.4"/></svg>
+        Setup
+      </button>
+    </nav>
+    <div class="me">
+      <span class="avatar">HW</span>
+      <div>
+        <strong>Hnin Wai</strong>
+        <span>Administrator</span>
+        <a class="textlink" href="login.html">Sign out</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
+        <input id="q" type="search" placeholder="Search campaigns, donors, staff" autocomplete="off" />
+      </label>
+      <time datetime="2026-10-07">7 Oct 2026</time>
+    </header>
+
+    <div class="stage">
+      <header class="pagehead">
+        <div>
+          <p class="eyebrow" id="eyebrow">Wednesday, 7 Oct</p>
+          <h1 id="title">Today</h1>
+          <p class="lede" id="lede">Four transfer vouchers are waiting. The flood kitchens are three quarters funded.</p>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="button" data-go="campaign" data-blank="1" data-actions="today campaigns">New campaign</button>
+          <button class="btn quiet" type="button" data-go="campaigns" data-actions="campaign">All campaigns</button>
+          <button class="btn primary" type="button" id="save-campaign" data-actions="campaign" hidden>Save campaign</button>
+          <button class="btn primary" type="button" id="add-expense" data-actions="expenses" hidden>Add expense</button>
+          <button class="btn primary" type="button" id="new-staff" data-actions="staff" hidden>New staff</button>
+        </div>
+      </header>
+
+      <section data-screen="today">
+        <div class="stats">
+          <article class="stat">
+            <p class="k">Raised in October</p>
+            <p class="figure">18.4<small>m</small></p>
+            <p class="delta">+2.1m since Monday</p>
+          </article>
+          <article class="stat">
+            <p class="k">Vouchers to check</p>
+            <p class="figure" id="awaiting-figure">4</p>
+            <p class="delta wait">KBZPay and Wave Money</p>
+          </article>
+          <article class="stat">
+            <p class="k">Active campaigns</p>
+            <p class="figure">3</p>
+            <p class="delta">1 funded, 1 paused</p>
+          </article>
+          <article class="stat">
+            <p class="k">Left, flood kitchens</p>
+            <p class="figure">12.2<small>m</small></p>
+            <p class="delta">After 6.2m in expenses</p>
+          </article>
+        </div>
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Campaign pace</h2>
+              <button class="textlink" type="button" data-go="campaigns">Open the list</button>
+            </div>
+            <button class="pace" type="button" data-row data-open-campaign="flood" data-search="ayeyarwady flood kitchens relief">
+              <span class="swatch flood"></span>
+              <span>
+                <strong>Ayeyarwady Flood Kitchens</strong>
+                <span class="meta">Relief · closes 12 Dec</span>
+                <span class="meter"><span style="width:74%"></span></span>
+              </span>
+              <span class="meta">74%</span>
+            </button>
+            <button class="pace" type="button" data-row data-open-campaign="read" data-search="mandalay reading rooms education">
+              <span class="swatch read"></span>
+              <span>
+                <strong>Mandalay Reading Rooms</strong>
+                <span class="meta">Education · closes 30 Nov</span>
+                <span class="meter"><span style="width:78%"></span></span>
+              </span>
+              <span class="meta">78%</span>
+            </button>
+            <button class="pace" type="button" data-row data-open-campaign="clinic" data-search="shan mobile clinic health">
+              <span class="swatch clinic"></span>
+              <span>
+                <strong>Shan Mobile Clinic</strong>
+                <span class="meta">Health · target met</span>
+                <span class="meter done"><span style="width:100%"></span></span>
+              </span>
+              <span class="meta">Funded</span>
+            </button>
+            <button class="pace" type="button" data-row data-open-campaign="wells" data-search="dry zone wells water">
+              <span class="swatch wells"></span>
+              <span>
+                <strong>Dry Zone Wells</strong>
+                <span class="meta">Water · closes 1 Mar</span>
+                <span class="meter"><span style="width:18%"></span></span>
+              </span>
+              <span class="meta">18%</span>
+            </button>
+            <button class="pace" type="button" data-row data-open-campaign="blankets" data-search="yangon winter blankets shelter">
+              <span class="swatch blankets"></span>
+              <span>
+                <strong>Yangon Winter Blankets</strong>
+                <span class="meta">Shelter · paused</span>
+                <span class="meter"><span style="width:30%"></span></span>
+              </span>
+              <span class="meta">Paused</span>
+            </button>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Waiting on a voucher</h2>
+              <button class="textlink" type="button" data-go="donations">Review all</button>
+            </div>
+            <button class="queue-item" type="button" data-row data-id="d1" data-status="pending" data-review="d1" data-search="su myat kbzpay flood 500,000">
+              <span><strong>Su Myat</strong><span class="meta">500,000 MMK · KBZPay · Flood kitchens</span></span>
+              <span class="pill status wait">Needs check</span>
+            </button>
+            <button class="queue-item" type="button" data-row data-id="d2" data-status="pending" data-review="d2" data-search="ko min thu wave wells 150,000">
+              <span><strong>Ko Min Thu</strong><span class="meta">150,000 MMK · Wave Money · Wells</span></span>
+              <span class="pill status wait">Needs check</span>
+            </button>
+            <button class="queue-item" type="button" data-row data-id="d3" data-status="pending" data-review="d3" data-search="daw hla hla kbzpay clinic 1,000,000">
+              <span><strong>Daw Hla Hla</strong><span class="meta">1,000,000 MMK · KBZPay · Mobile clinic</span></span>
+              <span class="pill status wait">Needs check</span>
+            </button>
+            <button class="queue-item" type="button" data-row data-id="d4" data-status="pending" data-review="d4" data-search="ma ei phyu wave blankets 80,000">
+              <span><strong>Ma Ei Phyu</strong><span class="meta">80,000 MMK · Wave Money · Blankets</span></span>
+              <span class="pill status wait">Needs check</span>
+            </button>
+          </section>
+        </div>
+        <p class="miss" hidden>Nothing matches that search.</p>
+      </section>
+
+      <section data-screen="campaigns" hidden>
+        <div class="chips" style="margin-bottom:12px">
+          <button type="button" class="is-on" data-filter="all">All</button>
+          <button type="button" data-filter="active">Active</button>
+          <button type="button" data-filter="funded">Funded</button>
+          <button type="button" data-filter="paused">Paused</button>
+        </div>
+        <div class="sheet">
+          <table>
+            <thead>
+              <tr>
+                <th>Appeal</th>
+                <th>Type</th>
+                <th>Raised</th>
+                <th>Closes</th>
+                <th>Owner</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="campaign-rows">
+              <tr data-row data-open data-id="flood" data-status="active" data-tone="flood" data-raised="18400000" data-target="25000000" data-date="2026-12-12" data-title="Ayeyarwady Flood Kitchens" data-type="Relief" data-owner="Hnin Wai" data-description="Hot meals for families displaced along the Ayeyarwady after the October floods. The kitchens run from Pathein and two riverside camps, with rice, oil, and fuel covered until 12 December." data-search="ayeyarwady flood kitchens relief hnin wai">
+                <td><strong data-label>Ayeyarwady Flood Kitchens</strong><div class="meta">Pathein and two riverside camps</div></td>
+                <td><span class="pill" data-type>Relief</span></td>
+                <td><div data-progress>18,400,000 of 25,000,000</div><div class="meter"><span style="width:74%"></span></div></td>
+                <td>12 Dec 2026</td>
+                <td><span data-owner>Hnin Wai</span></td>
+                <td><span class="pill status ok">Active</span></td>
+              </tr>
+              <tr data-row data-open data-id="read" data-status="active" data-tone="read" data-raised="6250000" data-target="8000000" data-date="2026-11-30" data-title="Mandalay Reading Rooms" data-type="Education" data-owner="Ko Aung Min" data-description="Shelves, children’s books, and a weekend reading hour for three ward libraries in Mandalay." data-search="mandalay reading rooms education ko aung min">
+                <td><strong data-label>Mandalay Reading Rooms</strong><div class="meta">Three ward libraries</div></td>
+                <td><span class="pill" data-type>Education</span></td>
+                <td><div data-progress>6,250,000 of 8,000,000</div><div class="meter"><span style="width:78%"></span></div></td>
+                <td>30 Nov 2026</td>
+                <td><span data-owner>Ko Aung Min</span></td>
+                <td><span class="pill status ok">Active</span></td>
+              </tr>
+              <tr data-row data-open data-id="clinic" data-status="funded" data-tone="clinic" data-raised="9800000" data-target="9500000" data-date="2026-10-20" data-title="Shan Mobile Clinic" data-type="Health" data-owner="May Thu" data-description="A visiting nurse team covering villages outside Taunggyi: medicines, fuel, and a cold box for vaccines." data-search="shan mobile clinic health may thu">
+                <td><strong data-label>Shan Mobile Clinic</strong><div class="meta">Villages outside Taunggyi</div></td>
+                <td><span class="pill" data-type>Health</span></td>
+                <td><div data-progress>9,800,000 of 9,500,000</div><div class="meter done"><span style="width:100%"></span></div></td>
+                <td>20 Oct 2026</td>
+                <td><span data-owner>May Thu</span></td>
+                <td><span class="pill status ok">Funded</span></td>
+              </tr>
+              <tr data-row data-open data-id="wells" data-status="active" data-tone="wells" data-raised="2100000" data-target="12000000" data-date="2027-03-01" data-title="Dry Zone Wells" data-type="Water" data-owner="Ko Aung Min" data-description="Four hand-dug wells for villages in the dry zone that still buy water by the barrel." data-search="dry zone wells water ko aung min">
+                <td><strong data-label>Dry Zone Wells</strong><div class="meta">Four villages, dry zone</div></td>
+                <td><span class="pill" data-type>Water</span></td>
+                <td><div data-progress>2,100,000 of 12,000,000</div><div class="meter"><span style="width:18%"></span></div></td>
+                <td>1 Mar 2027</td>
+                <td><span data-owner>Ko Aung Min</span></td>
+                <td><span class="pill status ok">Active</span></td>
+              </tr>
+              <tr data-row data-open data-id="blankets" data-status="paused" data-tone="blankets" data-raised="890000" data-target="3000000" data-date="2026-12-01" data-title="Yangon Winter Blankets" data-type="Shelter" data-owner="Hnin Wai" data-description="Warm blankets for night shelters in Yangon’s outer townships. Paused until the warehouse is confirmed." data-search="yangon winter blankets shelter hnin wai">
+                <td><strong data-label>Yangon Winter Blankets</strong><div class="meta">Waiting on a warehouse</div></td>
+                <td><span class="pill" data-type>Shelter</span></td>
+                <td><div data-progress>890,000 of 3,000,000</div><div class="meter"><span style="width:30%"></span></div></td>
+                <td>1 Dec 2026</td>
+                <td><span data-owner>Hnin Wai</span></td>
+                <td><span class="pill status off">Paused</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="miss" hidden>Nothing matches that search.</p>
+        </div>
+      </section>
+
+      <section data-screen="campaign" hidden>
+        <div class="editor" id="editor" data-raised="18400000" data-tone="flood" data-id="flood">
+          <form class="form-card" id="campaign-form">
+            <div class="form-grid">
+              <label class="field wide">Title
+                <input id="f-title" type="text" value="Ayeyarwady Flood Kitchens" />
+              </label>
+              <label class="field wide">Description
+                <textarea id="f-description">Hot meals for families displaced along the Ayeyarwady after the October floods. The kitchens run from Pathein and two riverside camps, with rice, oil, and fuel covered until 12 December.</textarea>
+              </label>
+              <label class="field">Target amount (MMK)
+                <input id="f-target" type="number" min="10000" value="25000000" />
+              </label>
+              <label class="field">Closing date
+                <input id="f-date" type="date" value="2026-12-12" />
+              </label>
+              <label class="field">Campaign type
+                <select id="f-type">
+                  <option>Relief</option>
+                  <option>Education</option>
+                  <option>Health</option>
+                  <option>Water</option>
+                  <option>Shelter</option>
+                </select>
+              </label>
+              <label class="field">Staff owner
+                <select id="f-owner">
+                  <option>Hnin Wai</option>
+                  <option>Ko Aung Min</option>
+                  <option>May Thu</option>
+                </select>
+              </label>
+              <label class="drop wide">
+                <input id="f-photos" type="file" accept="image/*" multiple />
+                <strong>Drop appeal photos</strong>
+                <span>PNG or JPG. Wide shots of the work.</span>
+              </label>
+              <p class="file-names wide" id="f-files">3 photos already attached</p>
+            </div>
+            <div class="actions" style="margin-top:16px">
+              <span class="pill status ok" id="editor-status">Active</span>
+              <button class="btn danger small" type="button" id="pause-campaign">Pause campaign</button>
+            </div>
+          </form>
+          <article class="preview">
+            <div class="cover flood" id="preview-cover"></div>
+            <div class="preview-body">
+              <p class="eyebrow">Donor preview</p>
+              <span class="pill" id="preview-type">Relief</span>
+              <h2 id="preview-title">Ayeyarwady Flood Kitchens</h2>
+              <p id="preview-desc">Hot meals for families displaced along the Ayeyarwady after the October floods. The kitchens run from Pathein and two riverside camps, with rice, oil, and fuel covered until 12 December.</p>
+              <div class="meter"><span id="preview-meter" style="width:74%"></span></div>
+              <p class="meta"><strong id="preview-raised">18,400,000</strong> of <span id="preview-target">25,000,000</span> MMK</p>
+              <p class="meta" id="preview-date">Closes 12 Dec 2026</p>
+              <div class="donate">Donate</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section data-screen="donations" hidden>
+        <div class="chips" style="margin-bottom:12px">
+          <button type="button" class="is-on" data-filter="all">All</button>
+          <button type="button" data-filter="pending">Needs check</button>
+          <button type="button" data-filter="verified">Verified</button>
+        </div>
+        <div class="sheet">
+          <table>
+            <thead>
+              <tr>
+                <th>Donor</th>
+                <th>Campaign</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Note</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="donation-rows">
+              <tr data-row data-id="d1" data-status="pending" data-donor="Su Myat" data-amount="500,000" data-method="KBZPay" data-appeal="Ayeyarwady Flood Kitchens" data-ref="KBZ 8841 2290" data-when="6 Oct 2026, 14:22" data-note="For the kitchens in Pathein." data-search="su myat ayeyarwady flood kitchens kbzpay 500,000">
+                <td>Su Myat</td>
+                <td>Ayeyarwady Flood Kitchens</td>
+                <td class="money">500,000</td>
+                <td>KBZPay</td>
+                <td>For the kitchens in Pathein.</td>
+                <td>6 Oct 2026</td>
+                <td><span class="pill status wait">Needs check</span></td>
+                <td><button class="btn small primary" type="button" data-review="d1">Review</button></td>
+              </tr>
+              <tr data-row data-id="d2" data-status="pending" data-donor="Ko Min Thu" data-amount="150,000" data-method="Wave Money" data-appeal="Dry Zone Wells" data-ref="WAVE 2201 884" data-when="6 Oct 2026, 11:05" data-note="Second well, Myingyan." data-search="ko min thu dry zone wells wave 150,000">
+                <td>Ko Min Thu</td>
+                <td>Dry Zone Wells</td>
+                <td class="money">150,000</td>
+                <td>Wave Money</td>
+                <td>Second well, Myingyan.</td>
+                <td>6 Oct 2026</td>
+                <td><span class="pill status wait">Needs check</span></td>
+                <td><button class="btn small primary" type="button" data-review="d2">Review</button></td>
+              </tr>
+              <tr data-row data-id="d3" data-status="pending" data-donor="Daw Hla Hla" data-amount="1,000,000" data-method="KBZPay" data-appeal="Shan Mobile Clinic" data-ref="KBZ 7710 4412" data-when="5 Oct 2026, 18:40" data-note="Vaccine cold box." data-search="daw hla hla shan mobile clinic kbzpay 1,000,000">
+                <td>Daw Hla Hla</td>
+                <td>Shan Mobile Clinic</td>
+                <td class="money">1,000,000</td>
+                <td>KBZPay</td>
+                <td>Vaccine cold box.</td>
+                <td>5 Oct 2026</td>
+                <td><span class="pill status wait">Needs check</span></td>
+                <td><button class="btn small primary" type="button" data-review="d3">Review</button></td>
+              </tr>
+              <tr data-row data-id="d4" data-status="pending" data-donor="Ma Ei Phyu" data-amount="80,000" data-method="Wave Money" data-appeal="Yangon Winter Blankets" data-ref="WAVE 1190 332" data-when="4 Oct 2026, 09:12" data-note="Blankets for Hlaing Tharyar." data-search="ma ei phyu yangon winter blankets wave 80,000">
+                <td>Ma Ei Phyu</td>
+                <td>Yangon Winter Blankets</td>
+                <td class="money">80,000</td>
+                <td>Wave Money</td>
+                <td>Blankets for Hlaing Tharyar.</td>
+                <td>4 Oct 2026</td>
+                <td><span class="pill status wait">Needs check</span></td>
+                <td><button class="btn small primary" type="button" data-review="d4">Review</button></td>
+              </tr>
+              <tr data-row data-id="d5" data-status="verified" data-donor="U Kyaw Zin" data-amount="250,000" data-method="KBZPay" data-appeal="Mandalay Reading Rooms" data-ref="KBZ 6502 118" data-when="2 Oct 2026, 16:02" data-note="Children’s picture books." data-search="u kyaw zin mandalay reading rooms kbzpay 250,000">
+                <td>U Kyaw Zin</td>
+                <td>Mandalay Reading Rooms</td>
+                <td class="money">250,000</td>
+                <td>KBZPay</td>
+                <td>Children’s picture books.</td>
+                <td>2 Oct 2026</td>
+                <td><span class="pill status ok">Verified</span></td>
+                <td><button class="btn small quiet" type="button" data-review="d5">Voucher</button></td>
+              </tr>
+              <tr data-row data-id="d6" data-status="verified" data-donor="Su Myat" data-amount="200,000" data-method="Visa / Mastercard" data-appeal="Ayeyarwady Flood Kitchens" data-ref="CARD 3391" data-when="28 Sep 2026, 20:18" data-note="Card gift, counted when it cleared." data-search="su myat ayeyarwady flood kitchens visa 200,000">
+                <td>Su Myat</td>
+                <td>Ayeyarwady Flood Kitchens</td>
+                <td class="money">200,000</td>
+                <td>Visa / Mastercard</td>
+                <td>Card gift, counted when it cleared.</td>
+                <td>28 Sep 2026</td>
+                <td><span class="pill status ok">Verified</span></td>
+                <td><button class="btn small quiet" type="button" data-review="d6">Receipt</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="miss" hidden>Nothing matches that search.</p>
+        </div>
+      </section>
+
+      <section data-screen="donors" hidden>
+        <div class="split">
+          <div class="directory sheet" id="donor-list">
+            <button class="person is-on" type="button" data-row data-donor="su" data-status="active" data-name="Su Myat" data-initials="SM" data-tone="saffron" data-email="su.myat@example.com" data-phone="09 421 883 210" data-address="Bahan, Yangon" data-given="700,000" data-since="March 2024" data-search="su myat yangon bahan">
+              <span class="avatar saffron">SM</span>
+              <span><strong data-label>Su Myat</strong><span class="meta">Bahan, Yangon</span></span>
+              <span class="pill status ok">Active</span>
+            </button>
+            <button class="person" type="button" data-row data-donor="kyaw" data-status="active" data-name="U Kyaw Zin" data-initials="KZ" data-tone="gold" data-email="kyaw.zin@example.com" data-phone="09 250 114 903" data-address="Chan Aye Thar Zan, Mandalay" data-given="250,000" data-since="August 2025" data-search="u kyaw zin mandalay">
+              <span class="avatar gold">KZ</span>
+              <span><strong data-label>U Kyaw Zin</strong><span class="meta">Mandalay</span></span>
+              <span class="pill status ok">Active</span>
+            </button>
+            <button class="person" type="button" data-row data-donor="hla" data-status="inactive" data-name="Daw Hla Hla" data-initials="HH" data-tone="clay" data-email="hla.hla@example.com" data-phone="09 430 228 761" data-address="Taunggyi" data-given="1,000,000" data-since="January 2023" data-search="daw hla hla taunggyi">
+              <span class="avatar clay">HH</span>
+              <span><strong data-label>Daw Hla Hla</strong><span class="meta">Taunggyi</span></span>
+              <span class="pill status off">Inactive</span>
+            </button>
+            <button class="person" type="button" data-row data-donor="min" data-status="active" data-name="Ko Min Thu" data-initials="MT" data-tone="slate" data-email="min.thu@example.com" data-phone="09 790 441 220" data-address="Myingyan" data-given="150,000" data-since="June 2026" data-search="ko min thu myingyan">
+              <span class="avatar slate">MT</span>
+              <span><strong data-label>Ko Min Thu</strong><span class="meta">Myingyan</span></span>
+              <span class="pill status ok">Active</span>
+            </button>
+            <button class="person" type="button" data-row data-donor="ei" data-status="active" data-name="Ma Ei Phyu" data-initials="EP" data-tone="" data-email="ei.phyu@example.com" data-phone="09 512 008 441" data-address="Hlaing Tharyar, Yangon" data-given="80,000" data-since="October 2026" data-search="ma ei phyu hlaing tharyar yangon">
+              <span class="avatar">EP</span>
+              <span><strong data-label>Ma Ei Phyu</strong><span class="meta">Hlaing Tharyar</span></span>
+              <span class="pill status ok">Active</span>
+            </button>
+            <p class="miss" hidden>Nothing matches that search.</p>
+          </div>
+          <article class="profile" id="donor-profile">
+            <div class="profile-top">
+              <div class="who-cell">
+                <span class="avatar saffron" id="donor-avatar">SM</span>
+                <div>
+                  <h2 id="donor-name">Su Myat</h2>
+                  <p class="meta">Donor since <span id="donor-since">March 2024</span></p>
+                </div>
+              </div>
+              <span class="pill status ok" id="donor-status">Active</span>
+            </div>
+            <dl class="facts">
+              <dt>Email</dt><dd id="donor-email">su.myat@example.com</dd>
+              <dt>Phone</dt><dd id="donor-phone">09 421 883 210</dd>
+              <dt>Address</dt><dd id="donor-address">Bahan, Yangon</dd>
+              <dt>Lifetime</dt><dd id="donor-given">700,000 MMK</dd>
+            </dl>
+            <h3>Gifts</h3>
+            <div class="gift-list" id="gift-list"></div>
+            <div class="actions" style="margin-top:16px">
+              <button class="btn danger small" type="button" id="donor-toggle">Deactivate sign-in</button>
+              <button class="btn small" type="button" id="see-gifts" data-find="Su Myat">See gifts in the ledger</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section data-screen="expenses" hidden>
+        <div class="switcher">
+          <button type="button" class="is-on" data-ledger-pick="flood"><strong>Flood kitchens</strong><span>18.4m received</span></button>
+          <button type="button" data-ledger-pick="read"><strong>Reading rooms</strong><span>6.3m received</span></button>
+          <button type="button" data-ledger-pick="clinic"><strong>Mobile clinic</strong><span>9.8m received</span></button>
+          <button type="button" data-ledger-pick="wells"><strong>Dry zone wells</strong><span>2.1m received</span></button>
+          <button type="button" data-ledger-pick="blankets"><strong>Winter blankets</strong><span>0.9m received</span></button>
+        </div>
+
+        <div data-ledger="flood" data-received="18400000" data-spent="6230000" data-target="25000000">
+          <div class="stats budgets">
+            <article class="stat"><p class="k">Received</p><p class="figure" style="font-size:28px"><span data-money="received">18,400,000</span></p><p class="delta">MMK from donors</p></article>
+            <article class="stat"><p class="k">Spent</p><p class="figure" style="font-size:28px"><span class="money out" data-money="spent">6,230,000</span></p><p class="delta hot">Recorded expenses</p></article>
+            <article class="stat"><p class="k">Left now</p><p class="figure" style="font-size:28px"><span data-money="left">12,170,000</span></p><p class="delta">Received minus spent</p></article>
+            <article class="stat"><p class="k">Left if target is met</p><p class="figure" style="font-size:28px"><span data-money="expected">18,770,000</span></p><p class="delta">Target minus spent</p></article>
+          </div>
+          <div class="sheet">
+            <table>
+              <thead><tr><th>Expense</th><th>Type</th><th>Amount (MMK)</th><th></th></tr></thead>
+              <tbody>
+                <tr data-row data-search="rice and oil food"><td><strong>Rice and oil for Pathein</strong><div class="meta">Weekly market run</div></td><td>Food</td><td class="money out">2,400,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+                <tr data-row data-search="truck transport"><td><strong>Truck to the riverside camps</strong><div class="meta">Two trips</div></td><td>Transport</td><td class="money out">860,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+                <tr data-row data-search="kitchen fuel logistics"><td><strong>Kitchen fuel</strong><div class="meta">Gas and firewood</div></td><td>Logistics</td><td class="money out">1,470,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+                <tr data-row data-search="volunteer meals food"><td><strong>Volunteer meals</strong><div class="meta">Cooks and drivers</div></td><td>Food</td><td class="money out">1,500,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+              </tbody>
+            </table>
+            <p class="miss empty-ledger" hidden>No expenses on this campaign yet.</p>
+          </div>
+        </div>
+
+        <div data-ledger="read" data-received="6250000" data-spent="1100000" data-target="8000000" hidden>
+          <div class="stats budgets">
+            <article class="stat"><p class="k">Received</p><p class="figure" style="font-size:28px"><span data-money="received">6,250,000</span></p><p class="delta">MMK from donors</p></article>
+            <article class="stat"><p class="k">Spent</p><p class="figure" style="font-size:28px"><span class="money out" data-money="spent">1,100,000</span></p><p class="delta hot">Recorded expenses</p></article>
+            <article class="stat"><p class="k">Left now</p><p class="figure" style="font-size:28px"><span data-money="left">5,150,000</span></p><p class="delta">Received minus spent</p></article>
+            <article class="stat"><p class="k">Left if target is met</p><p class="figure" style="font-size:28px"><span data-money="expected">6,900,000</span></p><p class="delta">Target minus spent</p></article>
+          </div>
+          <div class="sheet">
+            <table>
+              <thead><tr><th>Expense</th><th>Type</th><th>Amount (MMK)</th><th></th></tr></thead>
+              <tbody>
+                <tr data-row data-search="picture books logistics"><td><strong>Children’s picture books</strong><div class="meta">First shipment</div></td><td>Logistics</td><td class="money out">800,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+                <tr data-row data-search="shelves logistics"><td><strong>Shelves for three rooms</strong><div class="meta">Carpentry</div></td><td>Logistics</td><td class="money out">300,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+              </tbody>
+            </table>
+            <p class="miss empty-ledger" hidden>No expenses on this campaign yet.</p>
+          </div>
+        </div>
+
+        <div data-ledger="clinic" data-received="9800000" data-spent="7200000" data-target="9500000" hidden>
+          <div class="stats budgets">
+            <article class="stat"><p class="k">Received</p><p class="figure" style="font-size:28px"><span data-money="received">9,800,000</span></p><p class="delta">MMK from donors</p></article>
+            <article class="stat"><p class="k">Spent</p><p class="figure" style="font-size:28px"><span class="money out" data-money="spent">7,200,000</span></p><p class="delta hot">Recorded expenses</p></article>
+            <article class="stat"><p class="k">Left now</p><p class="figure" style="font-size:28px"><span data-money="left">2,600,000</span></p><p class="delta">Received minus spent</p></article>
+            <article class="stat"><p class="k">Left if target is met</p><p class="figure" style="font-size:28px"><span data-money="expected">2,300,000</span></p><p class="delta">Target minus spent</p></article>
+          </div>
+          <div class="sheet">
+            <table>
+              <thead><tr><th>Expense</th><th>Type</th><th>Amount (MMK)</th><th></th></tr></thead>
+              <tbody>
+                <tr data-row data-search="medicines medical"><td><strong>Medicines</strong><div class="meta">Clinic stock for the round</div></td><td>Medical supplies</td><td class="money out">5,400,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+                <tr data-row data-search="fuel transport"><td><strong>Fuel for the visiting round</strong><div class="meta">Taunggyi circuit</div></td><td>Transport</td><td class="money out">1,800,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+              </tbody>
+            </table>
+            <p class="miss empty-ledger" hidden>No expenses on this campaign yet.</p>
+          </div>
+        </div>
+
+        <div data-ledger="wells" data-received="2100000" data-spent="400000" data-target="12000000" hidden>
+          <div class="stats budgets">
+            <article class="stat"><p class="k">Received</p><p class="figure" style="font-size:28px"><span data-money="received">2,100,000</span></p><p class="delta">MMK from donors</p></article>
+            <article class="stat"><p class="k">Spent</p><p class="figure" style="font-size:28px"><span class="money out" data-money="spent">400,000</span></p><p class="delta hot">Recorded expenses</p></article>
+            <article class="stat"><p class="k">Left now</p><p class="figure" style="font-size:28px"><span data-money="left">1,700,000</span></p><p class="delta">Received minus spent</p></article>
+            <article class="stat"><p class="k">Left if target is met</p><p class="figure" style="font-size:28px"><span data-money="expected">11,600,000</span></p><p class="delta">Target minus spent</p></article>
+          </div>
+          <div class="sheet">
+            <table>
+              <thead><tr><th>Expense</th><th>Type</th><th>Amount (MMK)</th><th></th></tr></thead>
+              <tbody>
+                <tr data-row data-search="site survey logistics"><td><strong>Site survey</strong><div class="meta">Four villages</div></td><td>Logistics</td><td class="money out">400,000</td><td><button class="btn small quiet" type="button" data-expense-edit>Edit</button></td></tr>
+              </tbody>
+            </table>
+            <p class="miss empty-ledger" hidden>No expenses on this campaign yet.</p>
+          </div>
+        </div>
+
+        <div data-ledger="blankets" data-received="890000" data-spent="0" data-target="3000000" hidden>
+          <div class="stats budgets">
+            <article class="stat"><p class="k">Received</p><p class="figure" style="font-size:28px"><span data-money="received">890,000</span></p><p class="delta">MMK from donors</p></article>
+            <article class="stat"><p class="k">Spent</p><p class="figure" style="font-size:28px"><span class="money out" data-money="spent">0</span></p><p class="delta hot">Recorded expenses</p></article>
+            <article class="stat"><p class="k">Left now</p><p class="figure" style="font-size:28px"><span data-money="left">890,000</span></p><p class="delta">Received minus spent</p></article>
+            <article class="stat"><p class="k">Left if target is met</p><p class="figure" style="font-size:28px"><span data-money="expected">3,000,000</span></p><p class="delta">Target minus spent</p></article>
+          </div>
+          <div class="sheet">
+            <table>
+              <thead><tr><th>Expense</th><th>Type</th><th>Amount (MMK)</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+            <p class="empty-ledger" style="padding:18px;color:#6e675c">No expenses on this campaign yet. It is paused until the warehouse is confirmed.</p>
+          </div>
+        </div>
+      </section>
+
+      <section data-screen="staff" hidden>
+        <div class="split staff">
+          <div class="directory sheet" id="staff-list">
+            <div class="person is-on" data-row data-id="hw" data-status="active" data-first="Hnin" data-last="Wai" data-email="hnin@bettertogether.org" data-address="Bahan, Yangon" data-phone="09 421 000 112" data-role="Administrator" data-search="hnin wai administrator">
+              <span class="avatar">HW</span>
+              <span><strong data-label>Hnin Wai</strong><span class="meta" data-role>Administrator</span></span>
+              <span class="pill status ok">Active</span>
+              <button class="btn small quiet" type="button" data-staff-toggle>Deactivate</button>
+            </div>
+            <div class="person" data-row data-id="am" data-status="active" data-first="Ko Aung" data-last="Min" data-email="aung@bettertogether.org" data-address="Chan Aye Thar Zan, Mandalay" data-phone="09 250 441 908" data-role="Campaign manager" data-search="ko aung min campaign manager">
+              <span class="avatar gold">AM</span>
+              <span><strong data-label>Ko Aung Min</strong><span class="meta" data-role>Campaign manager</span></span>
+              <span class="pill status ok">Active</span>
+              <button class="btn small quiet" type="button" data-staff-toggle>Deactivate</button>
+            </div>
+            <div class="person" data-row data-id="mt" data-status="active" data-first="May" data-last="Thu" data-email="may@bettertogether.org" data-address="Taunggyi" data-phone="09 430 100 774" data-role="Finance" data-search="may thu finance">
+              <span class="avatar slate">MT</span>
+              <span><strong data-label>May Thu</strong><span class="meta" data-role>Finance</span></span>
+              <span class="pill status ok">Active</span>
+              <button class="btn small quiet" type="button" data-staff-toggle>Deactivate</button>
+            </div>
+            <div class="person" data-row data-id="zm" data-status="inactive" data-first="Zin" data-last="Mar" data-email="zin@bettertogether.org" data-address="Hlaing, Yangon" data-phone="09 979 220 145" data-role="Volunteer coordinator" data-search="zin mar volunteer coordinator">
+              <span class="avatar clay">ZM</span>
+              <span><strong data-label>Zin Mar</strong><span class="meta" data-role>Volunteer coordinator</span></span>
+              <span class="pill status off">Inactive</span>
+              <button class="btn small quiet" type="button" data-staff-toggle>Activate</button>
+            </div>
+            <p class="miss" hidden>Nothing matches that search.</p>
+          </div>
+          <form class="profile" id="staff-form">
+            <input type="hidden" id="staff-id" value="hw" />
+            <h2 id="staff-form-title">Hnin Wai</h2>
+            <p class="lede">Name, contact, role, and the password they use at the staff sign-in.</p>
+            <div class="stack">
+              <div class="form-grid">
+                <label class="field">First name<input id="s-first" type="text" value="Hnin" /></label>
+                <label class="field">Last name<input id="s-last" type="text" value="Wai" /></label>
+              </div>
+              <label class="field">Email<input id="s-email" type="email" value="hnin@bettertogether.org" /></label>
+              <label class="field">Address<input id="s-address" type="text" value="Bahan, Yangon" /></label>
+              <label class="field">Phone<input id="s-phone" type="text" value="09 421 000 112" /></label>
+              <label class="field">Role
+                <select id="s-role">
+                  <option>Administrator</option>
+                  <option>Campaign manager</option>
+                  <option>Finance</option>
+                  <option>Volunteer coordinator</option>
+                </select>
+              </label>
+              <label class="field">Password
+                <input id="s-password" type="password" placeholder="••••••••" />
+              </label>
+              <p class="meta" id="staff-password-hint">Leave blank to keep the current password.</p>
+              <div class="actions">
+                <button class="btn primary" type="submit">Save staff</button>
+                <button class="btn danger" type="button" id="staff-toggle">Deactivate</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section data-screen="setup" hidden>
+        <div class="tabs">
+          <button type="button" class="is-on" data-tab="roles">Staff roles</button>
+          <button type="button" data-tab="types">Campaign types</button>
+          <button type="button" data-tab="payments">Payment methods</button>
+          <button type="button" data-tab="costs">Expense types</button>
+        </div>
+
+        <div class="sheet" data-pane="roles">
+          <div class="sheet-head">
+            <h2>Staff roles</h2>
+            <button class="btn small primary" type="button" data-reveal>Add role</button>
+          </div>
+          <form class="inline-form" data-setup-form hidden>
+            <label>Role name<input name="name" type="text" placeholder="Finance reviewer" /></label>
+            <button class="btn primary small" type="submit">Save</button>
+          </form>
+          <table>
+            <thead><tr><th>Name</th><th>People</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr data-row data-id="role-admin" data-status="active" data-search="administrator"><td data-label>Administrator</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="role-campaign" data-status="active" data-search="campaign manager"><td data-label>Campaign manager</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="role-finance" data-status="active" data-search="finance"><td data-label>Finance</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="role-volunteer" data-status="inactive" data-search="volunteer coordinator"><td data-label>Volunteer coordinator</td><td>1</td><td><span class="pill status off">Inactive</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Activate</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sheet" data-pane="types" hidden>
+          <div class="sheet-head">
+            <h2>Campaign types</h2>
+            <button class="btn small primary" type="button" data-reveal>Add type</button>
+          </div>
+          <form class="inline-form" data-setup-form hidden>
+            <label>Type name<input name="name" type="text" placeholder="Education" /></label>
+            <button class="btn primary small" type="submit">Save</button>
+          </form>
+          <table>
+            <thead><tr><th>Name</th><th>Campaigns</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr data-row data-id="type-relief" data-status="active" data-search="relief"><td data-label>Relief</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="type-edu" data-status="active" data-search="education"><td data-label>Education</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="type-health" data-status="active" data-search="health"><td data-label>Health</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="type-water" data-status="active" data-search="water"><td data-label>Water</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="type-shelter" data-status="active" data-search="shelter"><td data-label>Shelter</td><td>1</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sheet" data-pane="payments" hidden>
+          <div class="sheet-head">
+            <h2>Payment methods</h2>
+            <button class="btn small primary" type="button" data-reveal>Add method</button>
+          </div>
+          <form class="inline-form" data-setup-form hidden>
+            <label>Name<input name="name" type="text" placeholder="KBZPay" /></label>
+            <label>How it works<input name="note" type="text" placeholder="Transfer, then upload a screenshot" /></label>
+            <label class="checkline"><input name="verify" type="checkbox" checked /> Voucher required</label>
+            <button class="btn primary small" type="submit">Save</button>
+          </form>
+          <table>
+            <thead><tr><th>Name</th><th>How it works</th><th>Check</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr data-row data-id="pay-kbz" data-status="active" data-verify="yes" data-note="Transfer to the campaign account. The donor uploads a screenshot." data-search="kbzpay voucher"><td data-label>KBZPay</td><td data-note>Transfer to the campaign account. The donor uploads a screenshot.</td><td data-verify>Voucher required</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="pay-wave" data-status="active" data-verify="yes" data-note="Agent or app transfer. The donor uploads a screenshot." data-search="wave money voucher"><td data-label>Wave Money</td><td data-note>Agent or app transfer. The donor uploads a screenshot.</td><td data-verify>Voucher required</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="pay-card" data-status="active" data-verify="no" data-note="Card payment on the public site. Counted when it clears." data-search="visa mastercard instant"><td data-label>Visa / Mastercard</td><td data-note>Card payment on the public site. Counted when it clears.</td><td data-verify>Instant</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="pay-cash" data-status="inactive" data-verify="no" data-note="Counted by staff on the day, at the office." data-search="cash office"><td data-label>Cash at the office</td><td data-note>Counted by staff on the day, at the office.</td><td data-verify>Instant</td><td><span class="pill status off">Inactive</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Activate</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sheet" data-pane="costs" hidden>
+          <div class="sheet-head">
+            <h2>Expense types</h2>
+            <button class="btn small primary" type="button" data-reveal>Add type</button>
+          </div>
+          <form class="inline-form" data-setup-form hidden>
+            <label>Type name<input name="name" type="text" placeholder="Food" /></label>
+            <button class="btn primary small" type="submit">Save</button>
+          </form>
+          <table>
+            <thead><tr><th>Name</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr data-row data-id="cost-food" data-status="active" data-search="food"><td data-label>Food</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="cost-transport" data-status="active" data-search="transport"><td data-label>Transport</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="cost-med" data-status="active" data-search="medical supplies"><td data-label>Medical supplies</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="cost-log" data-status="active" data-search="logistics"><td data-label>Logistics</td><td><span class="pill status ok">Active</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Deactivate</button></td></tr>
+              <tr data-row data-id="cost-print" data-status="inactive" data-search="printing"><td data-label>Printing</td><td><span class="pill status off">Inactive</span></td><td><button class="btn small quiet" type="button" data-edit>Edit</button> <button class="btn small danger" type="button" data-toggle-row>Activate</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+  <aside class="drawer" id="drawer" hidden aria-label="Payment voucher">
+    <div class="drawer-head">
+      <div>
+        <p class="eyebrow">Payment voucher</p>
+        <h2 id="slip-state" style="font-family:var(--serif);font-weight:560;font-size:28px;letter-spacing:-0.03em">Waiting for a match</h2>
+      </div>
+      <button class="btn small quiet" type="button" data-close-drawer>Close</button>
+    </div>
+    <article class="slip">
+      <div class="brand-line"><span>BetterTogether</span><span id="slip-method">KBZPay</span></div>
+      <p class="amount"><span id="slip-amount">500,000</span> <small style="font-size:0.4em">MMK</small></p>
+      <dl>
+        <dt>Donor</dt><dd id="slip-donor">Su Myat</dd>
+        <dt>Campaign</dt><dd id="slip-appeal">Ayeyarwady Flood Kitchens</dd>
+        <dt>Reference</dt><dd id="slip-ref">KBZ 8841 2290</dd>
+        <dt>When</dt><dd id="slip-when">6 Oct 2026, 14:22</dd>
+        <dt>Note</dt><dd id="slip-note">For the kitchens in Pathein.</dd>
+      </dl>
+    </article>
+    <p class="lede" style="margin:14px 0">Match the reference and the amount to the transfer, then count the gift.</p>
+    <button class="btn primary" type="button" id="verify" data-id="d1">Verify and count this gift</button>
+  </aside>
+
+  <div class="modal" id="expense-modal" hidden>
+    <form class="dialog" id="expense-form">
+      <div class="modal-head">
+        <h2>Add expense</h2>
+        <button class="btn small quiet" type="button" data-close-modal>Close</button>
+      </div>
+      <div class="stack">
+        <label class="field">Title<input id="x-title" type="text" placeholder="Rice and oil" /></label>
+        <label class="field">Description<input id="x-note" type="text" placeholder="What it paid for" /></label>
+        <label class="field">Amount (MMK)<input id="x-amount" type="number" min="1000" placeholder="100000" /></label>
+        <label class="field">Expense type
+          <select id="x-type">
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Medical supplies</option>
+            <option>Logistics</option>
+          </select>
+        </label>
+        <label class="field">Campaign
+          <select id="expense-campaign">
+            <option value="flood">Ayeyarwady Flood Kitchens</option>
+            <option value="read">Mandalay Reading Rooms</option>
+            <option value="clinic">Shan Mobile Clinic</option>
+            <option value="wells">Dry Zone Wells</option>
+            <option value="blankets">Yangon Winter Blankets</option>
+          </select>
+        </label>
+        <button class="btn primary" type="submit">Add to the ledger</button>
+      </div>
+    </form>
+  </div>
+
+  <p class="toast" id="toast" hidden role="status"></p>
+  <script src="app.js"></script>
+</body>
+</html>

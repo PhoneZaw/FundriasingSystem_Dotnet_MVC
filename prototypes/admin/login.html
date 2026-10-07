@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — BetterTogether Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,640&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 24'%3E%3Ccircle cx='13' cy='12' r='9' fill='%231e4d3d'/%3E%3Ccircle cx='23' cy='12' r='9' fill='%23e07a2f'/%3E%3Ccircle cx='18' cy='12' r='4' fill='%23f3eee6'/%3E%3C/svg%3E" />
+</head>
+<body class="gate">
+  <section class="gate-story">
+    <a class="gate-brand" href="login.html">
+      <svg class="mark" viewBox="0 0 36 24" aria-hidden="true">
+        <circle cx="13" cy="12" r="9" fill="#f3eee6"/>
+        <circle cx="23" cy="12" r="9" fill="#e07a2f"/>
+        <circle cx="18" cy="12" r="4" fill="#143128"/>
+      </svg>
+      <span>
+        <strong>BetterTogether</strong>
+        <em>Operations</em>
+      </span>
+    </a>
+    <div>
+      <h1>Every kyat, named and checked.</h1>
+      <p class="sub">The desk for people who open campaigns, confirm transfer vouchers, and keep each appeal’s books in one place.</p>
+      <div class="gate-points">
+        <p><strong>Campaigns</strong><span>Write the appeal and watch it fill.</span></p>
+        <p><strong>Donations</strong><span>Match a voucher to a gift before it counts.</span></p>
+        <p><strong>Donors</strong><span>See who gave, and whether they can sign in.</span></p>
+        <p><strong>Expenses</strong><span>Spent, received, and what is still left.</span></p>
+      </div>
+    </div>
+    <span class="blob a" aria-hidden="true"></span>
+    <span class="blob b" aria-hidden="true"></span>
+  </section>
+
+  <section class="gate-panel">
+    <form class="signin" id="signin" novalidate>
+      <p class="eyebrow">Staff access</p>
+      <h2>Sign in</h2>
+      <p class="lede">Use the email and password issued for your staff role.</p>
+      <div class="stack">
+        <p class="error" id="signin-error" hidden>Enter both an email and a password.</p>
+        <label class="field">Email
+          <input type="email" name="email" autocomplete="username" placeholder="hnin@bettertogether.org" />
+        </label>
+        <label class="field">Password
+          <input type="password" name="password" autocomplete="current-password" placeholder="Your password" />
+        </label>
+        <button class="btn primary block" type="submit">Enter the desk</button>
+      </div>
+      <p class="hint">Prototype — any email and password opens the mockup. Nothing is saved.</p>
+    </form>
+  </section>
+  <script>
+    document.getElementById("signin").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const email = String(data.get("email") || "").trim();
+      const password = String(data.get("password") || "").trim();
+      const error = document.getElementById("signin-error");
+      if (!email || !password) {
+        error.hidden = false;
+        return;
+      }
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
