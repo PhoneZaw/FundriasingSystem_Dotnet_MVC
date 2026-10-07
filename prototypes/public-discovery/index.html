@@ -1,0 +1,758 @@
+<!-- PROTOTYPE, throwaway. Public discovery directions only. Not wired to the app. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BetterTogether — public discovery prototypes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,460;9..144,560&family=Instrument+Sans:wght@420;520;600&family=Newsreader:opsz,wght@6..72,450;6..72,560&family=Outfit:wght@380;520;640&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { background: #111; }
+    #stage { min-height: 100%; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+    .rise { animation: rise 260ms ease-out both; }
+    @media (prefers-reduced-motion: reduce) {
+      .rise { animation: none; }
+    }
+
+    /* Picker — verbatim spec */
+    .proto-picker {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.82);
+      -webkit-backdrop-filter: blur(12px) saturate(1.4);
+      backdrop-filter: blur(12px) saturate(1.4);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+        0 8px 24px rgba(0, 0, 0, 0.24),
+        0 2px 6px rgba(0, 0, 0, 0.12);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 13px;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .proto-picker-highlight {
+      position: absolute;
+      top: 4px;
+      left: 0;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      will-change: transform;
+    }
+    .proto-picker[data-ready] .proto-picker-highlight {
+      transition:
+        transform 250ms cubic-bezier(0.23, 1, 0.32, 1),
+        width 250ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .proto-picker[data-ready] .proto-picker-highlight { transition: none; }
+    }
+    .proto-picker-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.55);
+      font: inherit;
+      cursor: pointer;
+      transition: color 150ms ease-out;
+    }
+    .proto-picker-item:hover { color: rgba(255, 255, 255, 0.85); }
+    .proto-picker-item:active { transform: scale(0.97); }
+    .proto-picker-item:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.4);
+      outline-offset: 2px;
+    }
+    .proto-picker-item[data-active] { color: #fff; }
+    .proto-picker-divider {
+      width: 1px;
+      height: 16px;
+      margin: 0 4px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .proto-picker-replay { padding: 0 10px; font-size: 14px; }
+    .proto-picker[data-position="top"] { bottom: auto; top: 24px; }
+  </style>
+</head>
+<body>
+  <div id="stage"></div>
+  <nav class="proto-picker" aria-label="Prototype variants">
+    <span class="proto-picker-highlight" aria-hidden="true"></span>
+    <button class="proto-picker-item" data-active aria-current="true">Field Notes</button>
+    <button class="proto-picker-item">Open Floor</button>
+    <button class="proto-picker-item">Circle</button>
+    <span class="proto-picker-divider" aria-hidden="true"></span>
+    <button class="proto-picker-item proto-picker-replay" aria-label="Replay animation (R)">↻</button>
+  </nav>
+  <script>
+    const CAMPAIGNS = [
+      {
+        id: "flood",
+        type: "Emergency",
+        title: "Supper for the Ayeyarwady floods",
+        lede: "Twelve kitchens are still serving rice after the water came through Bogale.",
+        place: "Bogale",
+        host: "Ma Thida",
+        hostRole: "Kitchen lead",
+        raised: 48200000,
+        goal: 80000000,
+        days: 18,
+        donors: 1264,
+        img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80",
+        portrait: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+        story: "The river rose on a Tuesday. By Thursday the schoolyard was a kitchen. Ma Thida’s crew cooks two meals a day for families who are sleeping in the monastery hall. Rice, dried fish, and the oil to fry it are what runs out first."
+      },
+      {
+        id: "library",
+        type: "Education",
+        title: "A library that stays open after school",
+        lede: "Hpa-An students are borrowing books from a cupboard. They need a room.",
+        place: "Hpa-An",
+        host: "Ko Min Thu",
+        hostRole: "Teacher",
+        raised: 12400000,
+        goal: 20000000,
+        days: 41,
+        donors: 386,
+        img: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1600&q=80",
+        portrait: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+        story: "The English shelf is fourteen paperbacks and a dictionary with a broken spine. Ko Min Thu wants shelves, a fan, and a librarian’s hour after the last bell so the room is not just storage."
+      },
+      {
+        id: "clinic",
+        type: "Health",
+        title: "Night clinic across the river",
+        lede: "Dala’s ferry stops at dusk. The clinic should not.",
+        place: "Dala",
+        host: "Dr. Ei Phyu",
+        hostRole: "Physician",
+        raised: 31750000,
+        goal: 45000000,
+        days: 9,
+        donors: 902,
+        img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=80",
+        portrait: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80",
+        story: "After 7 the only light in the lane is a phone torch. The night shift needs a generator, two nurses, and a cabinet that actually locks. Nine days left on the lease for the room."
+      },
+      {
+        id: "strays",
+        type: "Community",
+        title: "A yard for the Bagan strays",
+        lede: "The temple dogs have a feeding route. They do not have shade.",
+        place: "Bagan",
+        host: "Su Su",
+        hostRole: "Neighbor",
+        raised: 6800000,
+        goal: 15000000,
+        days: 27,
+        donors: 214,
+        img: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1600&q=80",
+        portrait: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=80",
+        story: "Su Su already knows which dogs will take medicine and which ones only want rice. The yard is a fenced corner behind her aunt’s house: water, shade cloth, and a vet visit once a month."
+      },
+      {
+        id: "girls",
+        type: "Education",
+        title: "Forty scholarships in Mandalay",
+        lede: "The bus fare is why the second term goes empty.",
+        place: "Mandalay",
+        host: "Daw Hla",
+        hostRole: "School committee",
+        raised: 22100000,
+        goal: 60000000,
+        days: 54,
+        donors: 540,
+        img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=80",
+        portrait: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
+        story: "Forty girls have a place. What they do not have is the fare, the uniform, and a year of fees paid before the family has to choose. Daw Hla publishes every name that is funded."
+      },
+      {
+        id: "water",
+        type: "Community",
+        title: "Piped water for twelve Chin villages",
+        lede: "The walk for water is still two hours, and it is uphill home.",
+        place: "Chin State",
+        host: "Pa Lian",
+        hostRole: "Village council",
+        raised: 71000000,
+        goal: 90000000,
+        days: 12,
+        donors: 2108,
+        img: "https://images.unsplash.com/photo-1541544537156-7627a7a4aa1c?auto=format&fit=crop&w=1600&q=80",
+        portrait: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+        story: "The spring is clean. The path is not the problem people think it is — the problem is the afternoon, when the children carry the second load. Pipe and a storage tank finish what the path cannot."
+      }
+    ];
+
+    const GIFTS = [
+      ["Hlaing", "25,000", "Night clinic across the river"],
+      ["Aye Aye", "10,000", "A library that stays open after school"],
+      ["Ko Zin", "50,000", "Supper for the Ayeyarwady floods"],
+      ["Nandar", "15,000", "Piped water for twelve Chin villages"]
+    ];
+
+    function mmk(n) {
+      return n.toLocaleString("en-US") + " MMK";
+    }
+    function pct(c) {
+      return Math.min(100, Math.round((c.raised / c.goal) * 100));
+    }
+    function hay(c) {
+      return (c.title + " " + c.place + " " + c.type + " " + c.host + " " + c.lede).toLowerCase();
+    }
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+
+    function shell(klass, css, body) {
+      return `<div class="${klass}" style="min-height:100%;padding-bottom:96px">${css}${body}</div>`;
+    }
+
+    function fieldNotes() {
+      const feature = CAMPAIGNS[0];
+      const rest = CAMPAIGNS.slice(1);
+      const css = `<style>
+        .v-notes { background:#f3efe6; color:#1c1915; font-family:"Instrument Sans",sans-serif; }
+        .v-notes header { display:flex; justify-content:space-between; align-items:baseline; padding:22px 40px; }
+        .v-notes .brand { font-family:"Newsreader",serif; font-size:22px; letter-spacing:-0.03em; }
+        .v-notes nav { display:flex; gap:22px; font-size:14px; }
+        .v-notes nav button { background:none; border:0; padding:0; color:#1c1915; }
+        .v-notes .hero { display:grid; grid-template-columns:1.1fr 0.9fr; min-height:78vh; }
+        .v-notes .hero-copy { padding:48px 40px 64px; display:flex; flex-direction:column; justify-content:flex-end; }
+        .v-notes .kicker { font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:#5c564c; }
+        .v-notes h1 { font-family:"Newsreader",serif; font-weight:450; font-size:64px; line-height:0.96; letter-spacing:-0.03em; margin:14px 0 18px; }
+        .v-notes .lede { font-size:18px; max-width:38ch; line-height:1.45; color:#3a342c; }
+        .v-notes .meter { margin-top:28px; max-width:420px; }
+        .v-notes .meter-row { display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; }
+        .v-notes .track { height:2px; background:#d9d2c5; }
+        .v-notes .fill { height:2px; background:#0f6e56; transform-origin:left center; }
+        .v-notes .hero-actions { display:flex; gap:18px; align-items:center; margin-top:22px; }
+        .v-notes .give { background:#1c1915; color:#f3efe6; border:0; border-radius:999px; padding:12px 18px; }
+        .v-notes .quiet { background:none; border:0; padding:0; text-decoration:underline; text-underline-offset:3px; }
+        .v-notes .hero-photo { min-height:420px; background:#cfc6b8 center/cover no-repeat; }
+        .v-notes .index { padding:10px 40px 40px; }
+        .v-notes .index h2 { font-family:"Newsreader",serif; font-weight:450; font-size:28px; margin:0 0 8px; }
+        .v-notes .row { display:grid; grid-template-columns:72px 1fr auto; gap:18px; align-items:baseline; padding:18px 0; border-top:1px solid #ddd4c6; background:none; border-left:0; border-right:0; border-bottom:0; width:100%; text-align:left; color:inherit; }
+        .v-notes .row b { font-weight:520; }
+        .v-notes .row small { color:#5c564c; }
+        .v-notes .detail { padding:28px 40px 48px; display:grid; grid-template-columns:1.1fr 0.7fr; gap:36px; }
+        .v-notes .detail h1 { font-size:52px; }
+        .v-notes .amounts { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+        .v-notes .amounts button, .v-notes .confirm { border:1px solid #1c1915; background:transparent; border-radius:999px; padding:8px 14px; }
+        .v-notes .amounts button[data-on] { background:#1c1915; color:#f3efe6; }
+        .v-notes .confirm { background:#0f6e56; color:#f3efe6; border-color:#0f6e56; }
+        .v-notes .back { background:none; border:0; padding:0 0 12px; text-decoration:underline; text-underline-offset:3px; }
+        .v-notes .note { font-size:14px; color:#3a342c; }
+        @media (max-width:800px) {
+          .v-notes .hero, .v-notes .detail { grid-template-columns:1fr; }
+          .v-notes h1 { font-size:40px; }
+          .v-notes header, .v-notes .hero-copy, .v-notes .index, .v-notes .detail { padding-left:20px; padding-right:20px; }
+        }
+      </style>`;
+      const rows = rest.map((c, i) => `
+        <button class="row" data-open="${c.id}" data-card data-type="${c.type}" data-hay="${esc(hay(c))}">
+          <small>0${i + 2}</small>
+          <span><b>${esc(c.title)}</b><br><small>${esc(c.place)} · ${esc(c.type)} · ${c.days} days left</small></span>
+          <small>${pct(c)}%</small>
+        </button>`).join("");
+      const body = `
+        <header class="rise">
+          <div class="brand">BetterTogether</div>
+          <nav>
+            <button type="button" data-home>Campaigns</button>
+            <button type="button" data-certificate>Certificates</button>
+            <button type="button" data-login>Log in</button>
+          </nav>
+        </header>
+        <div data-view>
+          <section class="hero">
+            <div class="hero-copy rise">
+              <div class="kicker">${esc(feature.place)} · ${esc(feature.type)}</div>
+              <h1>${esc(feature.title)}</h1>
+              <p class="lede">${esc(feature.lede)}</p>
+              <div class="meter">
+                <div class="meter-row"><span>${mmk(feature.raised)} given</span><span>of ${mmk(feature.goal)}</span></div>
+                <div class="track"><div class="fill" style="width:${pct(feature)}%"></div></div>
+              </div>
+              <div class="hero-actions">
+                <button class="give" data-open="${feature.id}">Give to this story</button>
+                <button class="quiet" data-jump>Read the other five</button>
+              </div>
+            </div>
+            <div class="hero-photo rise" style="background-image:url('${feature.img}')" role="img" aria-label="${esc(feature.title)}"></div>
+          </section>
+          <section class="index" id="index">
+            <h2 class="rise">Also open</h2>
+            <label class="kicker" for="notes-search">Find a campaign</label>
+            <input id="notes-search" data-search placeholder="Place, host, or cause" style="display:block;margin:10px 0 18px;width:min(420px,100%);background:transparent;border:0;border-bottom:1px solid #1c1915;padding:8px 0;border-radius:0" />
+            <p data-empty hidden class="note">Nothing matches that.</p>
+            ${rows}
+          </section>
+        </div>`;
+      return shell("v-notes", css, body);
+    }
+
+    function openFloor() {
+      const css = `<style>
+        .v-floor { background:#f5f6f8; color:#121417; font-family:"Outfit",sans-serif; }
+        .v-floor header { display:flex; justify-content:space-between; align-items:center; padding:18px 28px; background:#121417; color:#f5f6f8; }
+        .v-floor .brand { font-weight:640; letter-spacing:-0.04em; font-size:18px; }
+        .v-floor header nav { display:flex; gap:16px; }
+        .v-floor header button { background:none; border:0; color:#f5f6f8; padding:0; }
+        .v-floor .tools { padding:22px 28px 0; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+        .v-floor h1 { font-size:28px; letter-spacing:-0.04em; margin:0 28px; font-weight:640; }
+        .v-floor .sub { margin:4px 28px 0; color:#4b5160; }
+        .v-floor input[data-search] { flex:1; min-width:220px; border:1px solid #d5d8e0; background:#fff; border-radius:10px; padding:10px 12px; }
+        .v-floor .chips, .v-floor .sorts { display:flex; gap:6px; flex-wrap:wrap; }
+        .v-floor .chips button, .v-floor .sorts button { border:1px solid #d5d8e0; background:#fff; border-radius:999px; padding:7px 10px; color:#121417; }
+        .v-floor .chips button[data-on], .v-floor .sorts button[data-on] { background:#121417; color:#fff; border-color:#121417; }
+        .v-floor .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:18px 28px 28px; }
+        .v-floor article { background:#fff; border-radius:16px; overflow:hidden; display:flex; flex-direction:column; border:1px solid #e6e8ee; }
+        .v-floor .shot { height:150px; background:#d5d8e0 center/cover no-repeat; }
+        .v-floor .pad { padding:14px 14px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
+        .v-floor .type { font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#5c6578; }
+        .v-floor h2 { font-size:18px; line-height:1.2; letter-spacing:-0.03em; margin:0; font-weight:640; }
+        .v-floor .track { height:8px; background:#eceef3; border-radius:99px; overflow:hidden; }
+        .v-floor .fill { height:100%; background:#121417; transform-origin:left center; }
+        .v-floor .meta { display:flex; justify-content:space-between; font-size:13px; color:#303644; }
+        .v-floor .give { margin-top:auto; background:#123a8f; color:#fff; border:0; border-radius:10px; padding:10px 12px; }
+        .v-floor .detail { display:grid; grid-template-columns:1.15fr 0.85fr; gap:22px; padding:22px 28px; }
+        .v-floor .detail .shot { height:320px; border-radius:16px; }
+        .v-floor .amounts { display:flex; gap:8px; flex-wrap:wrap; }
+        .v-floor .amounts button, .v-floor .confirm, .v-floor .back { border-radius:10px; padding:8px 12px; border:1px solid #d5d8e0; background:#fff; }
+        .v-floor .amounts button[data-on], .v-floor .confirm { background:#123a8f; color:#fff; border-color:#123a8f; }
+        .v-floor .empty { padding:12px 28px; color:#4b5160; }
+        @media (max-width:900px) { .v-floor .grid, .v-floor .detail { grid-template-columns:1fr; } }
+      </style>`;
+      const cards = CAMPAIGNS.map((c) => `
+        <article class="rise" data-card data-open-card data-type="${c.type}" data-hay="${esc(hay(c))}" data-days="${c.days}" data-pct="${pct(c)}" data-raised="${c.raised}">
+          <div class="shot" style="background-image:url('${c.img}')"></div>
+          <div class="pad">
+            <div class="type">${esc(c.type)} · ${esc(c.place)}</div>
+            <h2>${esc(c.title)}</h2>
+            <div class="meta"><span>${mmk(c.raised)}</span><span>${pct(c)}%</span></div>
+            <div class="track"><div class="fill" style="width:${pct(c)}%"></div></div>
+            <div class="meta"><span>of ${mmk(c.goal)}</span><span>${c.days} days</span></div>
+            <button class="give" data-open="${c.id}">Give</button>
+          </div>
+        </article>`).join("");
+      const chips = ["All", "Emergency", "Education", "Health", "Community"].map((cat, i) =>
+        `<button type="button" data-cat="${cat}" ${i === 0 ? "data-on" : ""}>${cat}</button>`).join("");
+      const body = `
+        <header class="rise">
+          <div class="brand">BetterTogether</div>
+          <nav>
+            <button type="button" data-home>Campaigns</button>
+            <button type="button" data-certificate>Certificates</button>
+            <button type="button" data-login>Log in</button>
+          </nav>
+        </header>
+        <div data-view>
+          <h1 class="rise">Six campaigns still taking gifts</h1>
+          <p class="sub rise">Compare what is funded, what is close, and what ends first.</p>
+          <div class="tools">
+            <input data-search placeholder="Search title, place, or host" aria-label="Search campaigns" />
+            <div class="chips">${chips}</div>
+            <div class="sorts">
+              <button type="button" data-sort="days" data-on>Ending soon</button>
+              <button type="button" data-sort="raised">Most given</button>
+              <button type="button" data-sort="pct">Almost there</button>
+            </div>
+          </div>
+          <p class="empty" data-empty hidden>No campaign matches.</p>
+          <div class="grid" data-grid>${cards}</div>
+        </div>`;
+      return shell("v-floor", css, body);
+    }
+
+    function circle() {
+      const css = `<style>
+        .v-circle { background:#fff6ee; color:#2a2118; font-family:"Instrument Sans",sans-serif; }
+        .v-circle header { display:flex; justify-content:space-between; align-items:center; padding:20px 32px; }
+        .v-circle .brand { font-family:"Fraunces",serif; font-size:26px; font-weight:560; letter-spacing:-0.03em; }
+        .v-circle header nav { display:flex; gap:16px; }
+        .v-circle header button { background:none; border:0; padding:0; color:#2a2118; }
+        .v-circle .intro { padding:8px 32px 0; max-width:740px; }
+        .v-circle h1 { font-family:"Fraunces",serif; font-weight:460; font-size:48px; line-height:1.02; letter-spacing:-0.03em; margin:0 0 8px; }
+        .v-circle .hosts { display:flex; gap:14px; padding:18px 32px; overflow:auto; }
+        .v-circle .host { background:none; border:0; padding:0; text-align:center; color:inherit; min-width:84px; }
+        .v-circle .host img, .v-circle .host .all { width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid transparent; }
+        .v-circle .host .all { display:grid; place-items:center; background:#f0e2d4; font-family:"Fraunces",serif; font-size:18px; }
+        .v-circle .host[data-on] img, .v-circle .host[data-on] .all { border-color:#c2410c; }
+        .v-circle .host small { display:block; margin-top:6px; font-size:12px; }
+        .v-circle .gifts { margin:0 32px; background:#2a2118; color:#fff6ee; border-radius:14px; padding:12px 16px; display:flex; gap:22px; overflow:auto; font-size:14px; }
+        .v-circle .list { padding:8px 32px 28px; display:flex; flex-direction:column; gap:12px; }
+        .v-circle article { display:grid; grid-template-columns:112px 1fr auto; gap:16px; align-items:center; background:#fff; border-radius:18px; padding:12px; }
+        .v-circle article img.cover { width:112px; height:88px; object-fit:cover; border-radius:12px; }
+        .v-circle h2 { font-family:"Fraunces",serif; font-size:22px; font-weight:520; margin:0 0 4px; letter-spacing:-0.02em; }
+        .v-circle .join { background:#c2410c; color:#fff6ee; border:0; border-radius:999px; padding:10px 14px; }
+        .v-circle .searchline { padding:0 32px; }
+        .v-circle input { width:min(420px,100%); border:0; border-bottom:1px solid #2a2118; background:transparent; padding:8px 0; }
+        .v-circle .detail { display:grid; grid-template-columns:280px 1fr; gap:22px; padding:12px 32px 32px; }
+        .v-circle .detail img.cover { width:100%; height:280px; object-fit:cover; border-radius:20px; }
+        .v-circle .amounts { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
+        .v-circle .amounts button, .v-circle .confirm, .v-circle .back { border-radius:999px; padding:8px 12px; border:1px solid #2a2118; background:transparent; }
+        .v-circle .amounts button[data-on], .v-circle .confirm { background:#c2410c; color:#fff6ee; border-color:#c2410c; }
+        .v-circle .who { display:flex; align-items:center; gap:8px; font-size:14px; }
+        .v-circle .who img { width:28px; height:28px; border-radius:50%; object-fit:cover; }
+        @media (max-width:800px) {
+          .v-circle h1 { font-size:34px; }
+          .v-circle article, .v-circle .detail { grid-template-columns:1fr; }
+        }
+      </style>`;
+      const hosts = CAMPAIGNS.map((c) => `
+        <button class="host" type="button" data-host="${esc(c.host)}" data-cat-host="${c.id}">
+          <img src="${c.portrait}" alt="" />
+          <small>${esc(c.host)}</small>
+        </button>`).join("");
+      const rows = CAMPAIGNS.map((c) => `
+        <article class="rise" data-card data-type="${c.type}" data-hay="${esc(hay(c))}" data-host-name="${esc(c.host)}">
+          <img class="cover" src="${c.img}" alt="" />
+          <div>
+            <div class="who"><img src="${c.portrait}" alt="" /> ${esc(c.host)} is gathering in ${esc(c.place)}</div>
+            <h2>${esc(c.title)}</h2>
+            <div>${c.donors.toLocaleString("en-US")} people · ${mmk(c.raised)}</div>
+          </div>
+          <button class="join" data-open="${c.id}">Join ${esc(c.host.split(" ")[0])}</button>
+        </article>`).join("");
+      const gifts = GIFTS.map((g) => `<span><b>${esc(g[0])}</b> gave ${esc(g[1])} MMK to ${esc(g[2])}</span>`).join("");
+      const body = `
+        <header class="rise">
+          <div class="brand">BetterTogether</div>
+          <nav>
+            <button type="button" data-home>Gatherings</button>
+            <button type="button" data-certificate>Certificates</button>
+            <button type="button" data-login>Log in</button>
+          </nav>
+        </header>
+        <div data-view>
+          <div class="intro rise">
+            <h1>This week’s gatherings, hosted by people you could call.</h1>
+            <p>BetterTogether is the public list of who is cooking, teaching, and keeping a clinic lit. Pick a host, then join their gift.</p>
+          </div>
+          <div class="hosts rise"><button class="host" type="button" data-host="" data-on><span class="all">All</span><small>Everyone</small></button>${hosts}</div>
+          <div class="gifts rise" aria-label="Recent gifts">${gifts}</div>
+          <div class="searchline"><input data-search placeholder="Search a host or a place" aria-label="Search gatherings" /></div>
+          <p data-empty hidden style="padding:8px 32px">No gathering matches.</p>
+          <div class="list">${rows}</div>
+        </div>`;
+      return shell("v-circle", css, body);
+    }
+
+    function detailMarkup(rootClass, c, amount) {
+      const chosen = amount || 50000;
+      if (rootClass === "v-notes") {
+        return `
+          <div class="detail">
+            <div>
+              <button class="back" type="button" data-home>All stories</button>
+              <div class="kicker">${esc(c.place)} · ${esc(c.host)}, ${esc(c.hostRole)}</div>
+              <h1>${esc(c.title)}</h1>
+              <p class="lede">${esc(c.story)}</p>
+            </div>
+            <div>
+              <div class="hero-photo" style="height:220px;background-image:url('${c.img}')"></div>
+              <div class="meter">
+                <div class="meter-row"><span data-raised>${mmk(c.raised)}</span><span>of ${mmk(c.goal)}</span></div>
+                <div class="track"><div class="fill" data-fill style="width:${pct(c)}%"></div></div>
+              </div>
+              <div class="amounts">
+                ${[25000, 50000, 100000].map((n) => `<button type="button" data-amt="${n}" ${n === chosen ? "data-on" : ""}>${mmk(n)}</button>`).join("")}
+              </div>
+              <button class="confirm" type="button" data-pledge>Pledge this amount</button>
+              <p class="note" data-status>${c.days} days left · ${c.donors.toLocaleString("en-US")} people have given</p>
+            </div>
+          </div>`;
+      }
+      if (rootClass === "v-floor") {
+        return `
+          <div class="detail">
+            <div class="shot" style="background-image:url('${c.img}')"></div>
+            <div>
+              <button class="back" type="button" data-home>Back to the floor</button>
+              <div class="type">${esc(c.type)} · ${esc(c.place)} · ${esc(c.host)}</div>
+              <h1 style="font-size:36px;letter-spacing:-0.04em;margin:8px 0">${esc(c.title)}</h1>
+              <p>${esc(c.story)}</p>
+              <div class="meta"><span data-raised>${mmk(c.raised)}</span><span data-pct>${pct(c)}%</span></div>
+              <div class="track"><div class="fill" data-fill style="width:${pct(c)}%"></div></div>
+              <div class="amounts">
+                ${[25000, 50000, 100000].map((n) => `<button type="button" data-amt="${n}" ${n === chosen ? "data-on" : ""}>${mmk(n)}</button>`).join("")}
+              </div>
+              <button class="confirm" type="button" data-pledge>Give now</button>
+              <p data-status>${c.days} days left</p>
+            </div>
+          </div>`;
+      }
+      return `
+        <div class="detail">
+          <img class="cover" src="${c.img}" alt="" />
+          <div>
+            <button class="back" type="button" data-home>All gatherings</button>
+            <div class="who"><img src="${c.portrait}" alt="" /> ${esc(c.host)}, ${esc(c.hostRole)} · ${esc(c.place)}</div>
+            <h1>${esc(c.title)}</h1>
+            <p>${esc(c.story)}</p>
+            <p data-raised>${mmk(c.raised)} of ${mmk(c.goal)} · ${c.donors.toLocaleString("en-US")} people</p>
+            <div class="amounts">
+              ${[25000, 50000, 100000].map((n) => `<button type="button" data-amt="${n}" ${n === chosen ? "data-on" : ""}>${mmk(n)}</button>`).join("")}
+            </div>
+            <button class="confirm" type="button" data-pledge>Join with this gift</button>
+            <p data-status>Your name is added to ${esc(c.host)}’s list when you pledge.</p>
+          </div>
+        </div>`;
+    }
+
+    function bind(root) {
+      const view = () => root.querySelector("[data-view]");
+      const klass = root.className;
+      let pledge = 50000;
+
+      function paintList() {
+        const term = (root.querySelector("[data-search]")?.value || "").trim().toLowerCase();
+        const catBtn = root.querySelector("[data-cat][data-on]");
+        const cat = catBtn ? catBtn.dataset.cat : "All";
+        const hostBtn = root.querySelector(".host[data-on]");
+        const host = hostBtn ? hostBtn.dataset.host : "";
+        const cards = [...root.querySelectorAll("[data-card]")];
+        cards.forEach((card) => {
+          const okTerm = !term || (card.dataset.hay || "").includes(term);
+          const okCat = cat === "All" || card.dataset.type === cat;
+          const okHost = !host || card.dataset.hostName === host;
+          card.hidden = !(okTerm && okCat && okHost);
+        });
+        const empty = root.querySelector("[data-empty]");
+        if (empty) empty.hidden = cards.some((c) => !c.hidden);
+      }
+
+      function open(id) {
+        const live = CAMPAIGNS.find((c) => c.id === id);
+        view().innerHTML = detailMarkup(klass, live, pledge);
+        wireDetail(live);
+      }
+
+      function wireDetail(live) {
+        view().querySelectorAll("[data-amt]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            pledge = Number(btn.dataset.amt);
+            view().querySelectorAll("[data-amt]").forEach((b) => b.toggleAttribute("data-on", b === btn));
+          });
+        });
+        view().querySelector("[data-pledge]")?.addEventListener("click", () => {
+          live.raised += pledge;
+          live.donors += 1;
+          const raised = view().querySelector("[data-raised]");
+          const fill = view().querySelector("[data-fill]");
+          const status = view().querySelector("[data-status]");
+          if (raised) {
+            raised.textContent = klass === "v-circle"
+              ? `${mmk(live.raised)} of ${mmk(live.goal)} · ${live.donors.toLocaleString("en-US")} people`
+              : mmk(live.raised);
+          }
+          if (fill) fill.style.width = pct(live) + "%";
+          const pctEl = view().querySelector("[data-pct]");
+          if (pctEl) pctEl.textContent = pct(live) + "%";
+          if (status) status.textContent = `Pledged ${mmk(pledge)}. ${mmk(live.raised)} is now on this campaign.`;
+        });
+        view().querySelector("[data-home]")?.addEventListener("click", () => remountHome());
+      }
+
+      function remountHome() {
+        remountFrom(root);
+      }
+
+      root.querySelector("[data-search]")?.addEventListener("input", paintList);
+      root.querySelectorAll("[data-cat]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          root.querySelectorAll("[data-cat]").forEach((b) => b.toggleAttribute("data-on", b === btn));
+          paintList();
+        });
+      });
+      root.querySelectorAll("[data-sort]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          root.querySelectorAll("[data-sort]").forEach((b) => b.toggleAttribute("data-on", b === btn));
+          const key = btn.dataset.sort;
+          const grid = root.querySelector("[data-grid]");
+          const cards = [...grid.querySelectorAll("[data-card]")];
+          cards.sort((a, b) => Number(b.dataset[key]) - Number(a.dataset[key]));
+          if (key === "days") cards.sort((a, b) => Number(a.dataset.days) - Number(b.dataset.days));
+          cards.forEach((card) => grid.appendChild(card));
+        });
+      });
+      root.querySelectorAll(".host").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          root.querySelectorAll(".host").forEach((b) => b.toggleAttribute("data-on", b === btn));
+          paintList();
+        });
+      });
+      root.querySelectorAll("[data-open]").forEach((btn) => {
+        btn.addEventListener("click", () => open(btn.dataset.open));
+      });
+      root.querySelector("[data-jump]")?.addEventListener("click", () => {
+        root.querySelector("#index")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      root.querySelectorAll("[data-home]").forEach((btn) => {
+        if (!view().contains(btn)) btn.addEventListener("click", remountHome);
+      });
+      root.querySelector("[data-login]")?.addEventListener("click", () => openAccount(root));
+      paintSession(root);
+      const preset = root.querySelector("[data-sort][data-on]");
+      if (preset) preset.click();
+
+      root.querySelector("[data-certificate]")?.addEventListener("click", () => {
+        view().innerHTML = `<div style="padding:28px 32px;max-width:640px">
+          <button class="back" type="button" data-home style="background:none;border:0;text-decoration:underline;padding:0 0 12px">Back</button>
+          <h1 style="font-size:36px;letter-spacing:-0.03em">Check a gift certificate</h1>
+          <p>Enter the code printed on the certificate. This is the same check donors use after a verified gift.</p>
+          <form data-cert style="display:flex;gap:8px;margin-top:12px">
+            <input name="code" required placeholder="BT-2041" style="flex:1;padding:10px;border-radius:10px;border:1px solid currentColor;background:transparent" />
+            <button type="submit">Check</button>
+          </form>
+          <p data-cert-result></p>
+        </div>`;
+        view().querySelector("[data-home]")?.addEventListener("click", remountHome);
+        view().querySelector("[data-cert]")?.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const code = new FormData(e.target).get("code");
+          view().querySelector("[data-cert-result]").textContent = code === "BT-2041"
+            ? "BT-2041 is valid. Issued to Ma Thida’s flood kitchens on 2 Oct 2026."
+            : "No certificate matches " + code + ". Try BT-2041.";
+        });
+      });
+    }
+
+    let session = null;
+
+    function paintSession(root) {
+      const btn = root.querySelector("[data-login]");
+      if (btn) btn.textContent = session ? session.name : "Log in";
+    }
+
+    function openAccount(root) {
+      const view = () => root.querySelector("[data-view]");
+      if (session) {
+        view().innerHTML = `<div style="padding:28px 32px;max-width:560px">
+          <button class="back" type="button" data-home style="background:none;border:0;text-decoration:underline;padding:0 0 12px">Back</button>
+          <h1 style="font-size:36px;letter-spacing:-0.03em;margin:0 0 8px">Signed in as ${esc(session.name)}</h1>
+          <p>${esc(session.email)} can pledge on any open campaign. Gifts stay in this browser session.</p>
+          <button type="button" data-signout style="margin-top:16px;border-radius:999px;padding:10px 14px">Sign out</button>
+        </div>`;
+        view().querySelector("[data-home]").addEventListener("click", () => remountFrom(root));
+        view().querySelector("[data-signout]").addEventListener("click", () => {
+          session = null;
+          remountFrom(root);
+        });
+        return;
+      }
+      view().innerHTML = `<div style="padding:28px 32px;max-width:480px">
+        <button class="back" type="button" data-home style="background:none;border:0;text-decoration:underline;padding:0 0 12px">Back</button>
+        <h1 style="font-size:36px;letter-spacing:-0.03em;margin:0 0 8px">Log in</h1>
+        <p>Use the donor account you already have. This prototype accepts any password longer than 7 characters.</p>
+        <form data-auth style="display:grid;gap:10px;margin-top:14px">
+          <input name="email" type="email" required placeholder="you@example.com" style="padding:10px;border-radius:10px;border:1px solid currentColor;background:transparent" />
+          <input name="password" type="password" required minlength="8" placeholder="Password" style="padding:10px;border-radius:10px;border:1px solid currentColor;background:transparent" />
+          <button type="submit" style="justify-self:start;border-radius:999px;padding:10px 14px">Continue</button>
+        </form>
+        <p data-auth-result></p>
+      </div>`;
+      view().querySelector("[data-home]").addEventListener("click", () => remountFrom(root));
+      view().querySelector("[data-auth]").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const email = String(data.get("email") || "");
+        const name = email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (ch) => ch.toUpperCase());
+        session = { email, name: name || "Donor" };
+        remountFrom(root);
+      });
+    }
+
+    function remountFrom(root) {
+      const klass = root.className;
+      const html = klass === "v-notes" ? fieldNotes() : klass === "v-floor" ? openFloor() : circle();
+      root.outerHTML = html;
+      const next = document.querySelector("." + klass);
+      bind(next);
+    }
+
+    const variants = [fieldNotes, openFloor, circle];
+    const stage = document.getElementById("stage");
+    const picker = document.querySelector(".proto-picker");
+    const highlight = picker.querySelector(".proto-picker-highlight");
+    const items = [...picker.querySelectorAll(".proto-picker-item:not(.proto-picker-replay)")];
+    const replay = picker.querySelector(".proto-picker-replay");
+    let current = 0;
+
+    function moveHighlight() {
+      const el = items[current];
+      highlight.style.width = el.offsetWidth + "px";
+      highlight.style.transform = `translateX(${el.offsetLeft}px)`;
+    }
+
+    function mount(i) {
+      stage.innerHTML = "";
+      requestAnimationFrame(() => {
+        stage.innerHTML = variants[i]();
+        const root = stage.firstElementChild;
+        if (root) bind(root);
+      });
+    }
+
+    function setActive(i) {
+      if (i < 0 || i >= variants.length) return;
+      current = i;
+      items.forEach((el, j) => {
+        el.toggleAttribute("data-active", j === i);
+        if (j === i) el.setAttribute("aria-current", "true");
+        else el.removeAttribute("aria-current");
+      });
+      moveHighlight();
+      const url = new URL(location);
+      url.searchParams.set("v", i + 1);
+      history.replaceState(null, "", url);
+      mount(i);
+    }
+
+    items.forEach((el, i) => el.addEventListener("click", () => setActive(i)));
+    replay?.addEventListener("click", () => mount(current));
+    window.addEventListener("resize", moveHighlight);
+
+    document.addEventListener("keydown", (e) => {
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const num = parseInt(e.key, 10);
+      if (num >= 1 && num <= variants.length) setActive(num - 1);
+      else if (e.key === "ArrowRight") setActive((current + 1) % variants.length);
+      else if (e.key === "ArrowLeft") setActive((current - 1 + variants.length) % variants.length);
+      else if (e.key === "r" || e.key === "R") mount(current);
+    });
+
+    setActive((parseInt(new URLSearchParams(location.search).get("v"), 10) || 1) - 1);
+    requestAnimationFrame(() => requestAnimationFrame(() => picker.setAttribute("data-ready", "")));
+  </script>
+</body>
+</html>
